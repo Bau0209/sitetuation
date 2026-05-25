@@ -1,13 +1,708 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <title>SiteTuation</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SiteTuation</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    * { font-family: 'Plus Jakarta Sans', sans-serif; }
+    :root {
+      --blue: #4A7CF7;
+      --blue-light: #EEF2FF;
+      --green: #1CB98A;
+      --green-light: #E6FAF4;
+      --gray-bg: #F4F6FA;
+      --sidebar-collapsed: 56px;
+      --sidebar-expanded: 260px;
+    }
+
+    body { background: var(--gray-bg); margin: 0; overflow-x: hidden; }
+
+    /* ── Sidebar ────────────────────────────────────────────────── */
+    .sidebar {
+      width: var(--sidebar-collapsed);
+      background: #fff;
+      border-right: 1px solid #E8ECF2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px 0;
+      gap: 20px;
+      position: fixed;
+      top: 0; left: 0;
+      height: 100vh;
+      z-index: 100;
+      transition: width .3s cubic-bezier(.4,0,.2,1), box-shadow .3s;
+      overflow: hidden;
+    }
+    .sidebar.expanded {
+      width: var(--sidebar-expanded);
+      box-shadow: 4px 0 24px rgba(74,124,247,.10);
+      align-items: flex-start;
+    }
+
+    .sidebar-toggle {
+      width: 36px; height: 36px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 10px; cursor: pointer;
+      color: #9AA4B8; transition: all .2s;
+      flex-shrink: 0;
+      margin-left: 10px;
+    }
+    .sidebar-toggle:hover { background: var(--blue-light); color: var(--blue); }
+
+    .sidebar-icon {
+      width: 36px; height: 36px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 10px; cursor: pointer;
+      color: #9AA4B8; transition: all .2s;
+      flex-shrink: 0;
+    }
+    .sidebar-icon:hover, .sidebar-icon.active { background: var(--blue-light); color: var(--blue); }
+
+    .sidebar-nav-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 10px;
+      width: 100%;
+      cursor: pointer;
+      border-radius: 10px;
+      transition: background .2s;
+    }
+    .sidebar-nav-row:hover { background: var(--blue-light); }
+    .sidebar-nav-row .nav-label {
+      font-size: 14px; font-weight: 600; color: #1A2340;
+      white-space: nowrap; opacity: 0; transition: opacity .2s;
+    }
+    .sidebar.expanded .sidebar-nav-row .nav-label { opacity: 1; }
+    .sidebar.expanded .sidebar-icon { color: #9AA4B8; }
+    .sidebar.expanded .sidebar-nav-row:hover .sidebar-icon { color: var(--blue); }
+
+    /* Logo area in sidebar */
+    .sidebar-brand {
+      display: flex; align-items: center; gap: 10px;
+      padding: 0 10px; width: 100%;
+      overflow: hidden;
+    }
+    .sidebar-logo-icon { width: 32px; height: 32px; flex-shrink: 0; }
+    .sidebar-logo-text {
+      font-weight: 800; font-size: 18px; color: #1A2340;
+      white-space: nowrap; opacity: 0;
+      transition: opacity .2s;
+    }
+    .sidebar.expanded .sidebar-logo-text { opacity: 1; }
+
+    /* Expanded panel image */
+    .sidebar-panel-img {
+      width: calc(100% - 20px);
+      margin: 0 10px;
+      border-radius: 14px;
+      overflow: hidden;
+      opacity: 0;
+      max-height: 0;
+      transition: opacity .25s .1s, max-height .3s;
+      flex-shrink: 0;
+    }
+    .sidebar.expanded .sidebar-panel-img {
+      opacity: 1;
+      max-height: 200px;
+    }
+    .sidebar-panel-img img { width: 100%; height: auto; display: block; border-radius: 14px; }
+
+    /* Sidebar saves section */
+    .sidebar-saves {
+      width: 100%; padding: 0 10px;
+      opacity: 0; transition: opacity .2s;
+    }
+    .sidebar.expanded .sidebar-saves { opacity: 1; }
+    .saves-title { font-size: 12px; font-weight: 700; color: #1A2340; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 6px; }
+    .save-item { font-size: 12px; color: #9AA4B8; font-weight: 600; padding: 4px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    /* Avatar row */
+    .sidebar-avatar-row {
+      display: flex; align-items: center; gap: 10px;
+      margin-top: auto; padding: 0 10px; width: 100%;
+    }
+    .sidebar-avatar {
+      width: 34px; height: 34px; border-radius: 50%;
+      background: #E8ECF2; display: flex; align-items: center; justify-content: center;
+      color: #9AA4B8; cursor: pointer; flex-shrink: 0;
+    }
+    .avatar-info { opacity: 0; transition: opacity .2s; white-space: nowrap; }
+    .sidebar.expanded .avatar-info { opacity: 1; }
+    .avatar-name { font-size: 13px; font-weight: 700; color: #1A2340; }
+    .avatar-plan { font-size: 11px; color: #9AA4B8; font-weight: 600; }
+
+    /* ── Topbar ─────────────────────────────────────────────────── */
+    .topbar {
+      margin-left: var(--sidebar-collapsed);
+      background: #fff;
+      border-bottom: 1px solid #E8ECF2;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 28px; height: 60px;
+      position: sticky; top: 0; z-index: 90;
+      transition: margin-left .3s cubic-bezier(.4,0,.2,1);
+    }
+    .topbar.sidebar-open { margin-left: var(--sidebar-expanded); }
+
+    /* Logo in topbar */
+    .logo-wrap { display: flex; align-items: center; gap: 10px; }
+    .logo-icon-svg { width: 36px; height: 36px; }
+    .logo-text { font-weight: 800; font-size: 20px; color: #1A2340; letter-spacing: -.3px; }
+    .logo-text span { color: var(--blue); }
+
+    .credit-badge {
+      display: flex; align-items: center; gap: 6px;
+      background: #EEF2FF; color: var(--blue);
+      border-radius: 20px; padding: 6px 14px;
+      font-weight: 700; font-size: 14px;
+    }
+    .btn-upgrade {
+      background: var(--blue); color: #fff;
+      border: none; border-radius: 10px;
+      padding: 8px 18px; font-weight: 700; font-size: 14px;
+      cursor: pointer; transition: .2s; text-decoration: none;
+      display: inline-flex; align-items: center;
+    }
+    .btn-upgrade:hover { background: #3563e9; color: #fff; }
+
+    /* ── Main ──────────────────────────────────────────────────── */
+    .main {
+      margin-left: var(--sidebar-collapsed);
+      padding: 24px 28px;
+      display: flex; gap: 24px;
+      transition: margin-left .3s cubic-bezier(.4,0,.2,1);
+    }
+    .main.sidebar-open { margin-left: var(--sidebar-expanded); }
+
+    .map-side { flex: 1; display: flex; flex-direction: column; gap: 14px; }
+
+    .search-bar {
+      background: #fff; border: 1.5px solid #E8ECF2;
+      border-radius: 12px; display: flex; align-items: center;
+      gap: 10px; padding: 10px 16px;
+    }
+    .search-bar input {
+      border: none; outline: none; flex: 1;
+      font-size: 14px; color: #1A2340; background: transparent;
+    }
+
+    #map { border-radius: 16px; overflow: hidden; height: 500px; box-shadow: 0 4px 24px rgba(74,124,247,.08); }
+
+    /* ── Panel ─────────────────────────────────────────────────── */
+    .panel {
+      width: 380px; background: #fff;
+      border-radius: 18px; border: 1.5px solid #E8ECF2;
+      padding: 22px 20px; display: flex; flex-direction: column;
+      gap: 18px; overflow-y: auto;
+      max-height: calc(100vh - 108px);
+      box-shadow: 0 4px 24px rgba(74,124,247,.07);
+    }
+    .panel-title { font-size: 17px; font-weight: 800; color: #1A2340; }
+
+    .field-row { display: flex; gap: 12px; }
+    .field-group { flex: 1; }
+    .field-label { font-size: 11px; color: #9AA4B8; font-weight: 600; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 4px; }
+    .field-input { background: #F4F6FA; border-radius: 8px; padding: 8px 12px; font-size: 14px; color: #1A2340; font-weight: 600; }
+
+    .gen-row { display: flex; align-items: center; justify-content: flex-end; gap: 10px; }
+    .gen-cost { display: flex; align-items: center; gap: 5px; font-size: 13px; color: var(--blue); font-weight: 700; }
+    .btn-generate {
+      background: var(--blue); color: #fff; border: none;
+      border-radius: 10px; padding: 9px 20px;
+      font-weight: 700; font-size: 14px; cursor: pointer; transition: .2s;
+    }
+    .btn-generate:hover { background: #3563e9; }
+
+    .section { border-top: 1.5px solid #F0F2F7; padding-top: 16px; }
+    .section-header { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; cursor: pointer; user-select: none; }
+    .section-header h3 { font-size: 15px; font-weight: 800; color: #1A2340; margin: 0; }
+    .section-chevron { color: #9AA4B8; transition: transform .25s; }
+    .section-chevron.open { transform: rotate(180deg); }
+    .section-body { display: flex; flex-direction: column; gap: 10px; }
+
+    .stat-row { display: flex; justify-content: space-between; align-items: center; }
+    .stat-label { font-size: 12px; color: #9AA4B8; font-weight: 600; }
+    .stat-value { font-size: 13px; font-weight: 700; color: #1A2340; background: #F4F6FA; border-radius: 8px; padding: 5px 12px; }
+
+    .premium-field { background: #F4F6FA; border-radius: 10px; padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; }
+    .premium-icon { font-size: 16px; }
+
+    .upgrade-gate { background: var(--blue-light); border-radius: 12px; padding: 20px; text-align: center; }
+    .upgrade-gate p { font-size: 13px; color: #4A7CF7; font-weight: 600; margin-bottom: 10px; }
+    .btn-upgrade-small { background: var(--blue); color: #fff; border: none; border-radius: 8px; padding: 7px 18px; font-weight: 700; font-size: 13px; cursor: pointer; text-decoration: none; display: inline-block; }
+
+    .competitor-item { display: flex; align-items: center; justify-content: space-between; padding: 7px 0; border-bottom: 1px solid #F0F2F7; }
+    .competitor-item:last-child { border-bottom: none; }
+    .competitor-name { font-size: 13px; color: #1A2340; font-weight: 600; }
+    .competitor-dist { font-size: 12px; color: #9AA4B8; font-weight: 600; }
+
+    .styled-select { background: #F4F6FA; border: 1.5px solid #E8ECF2; border-radius: 8px; padding: 8px 12px; font-size: 13px; color: #1A2340; font-weight: 600; width: 100%; appearance: none; cursor: pointer; }
+
+    .plan-badge { display: inline-flex; align-items: center; gap: 6px; padding: 5px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; }
+    .plan-badge.free-badge { background: #F0F2F7; color: #6B7280; }
+    .plan-badge.plus-badge { background: #EEF2FF; color: var(--blue); }
+    .plan-badge.pro-badge  { background: #E6FAF4; color: var(--green); }
+
+    .traffic-bar { height: 8px; border-radius: 4px; background: #E8ECF2; overflow: hidden; margin-top: 6px; }
+    .traffic-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--blue), #7C3AED); transition: width 1s ease; }
+
+    select { font-family: inherit; }
+
+    @media (max-width: 900px) {
+      .main { flex-direction: column; }
+      .panel { width: 100%; max-height: none; }
+    }
+  </style>
 </head>
-
 <body>
-    <h1>SiteTuation</h1>
-    <p>This is the landing page</p>
-</body>
 
+<!-- ── Sidebar ────────────────────────────────────────────────────── -->
+<div class="sidebar" id="sidebar">
+
+  <!-- Brand / Logo -->
+  <div class="sidebar-brand">
+    <!-- Inline SVG logo icon matching the SiteTuation brand mark -->
+    <svg class="sidebar-logo-icon" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="18" cy="18" r="17" fill="url(#logoGradCircle)" opacity=".15"/>
+      <path d="M18 4 C10.268 4 4 10.268 4 18 C4 23.2 6.8 27.8 11 30.2 L18 34 L25 30.2 C29.2 27.8 32 23.2 32 18 C32 10.268 25.732 4 18 4Z" fill="url(#logoGradBg)"/>
+      <rect x="11" y="18" width="3.5" height="8" rx="1" fill="url(#logoGradBar)"/>
+      <rect x="16.2" y="13" width="3.5" height="13" rx="1" fill="url(#logoGradBar)"/>
+      <rect x="21.5" y="10" width="3.5" height="16" rx="1" fill="url(#logoGradBar)"/>
+      <path d="M11 22 L15.5 17 L19.5 20 L26 13" stroke="url(#logoGradLine)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M23 13 L26 13 L26 16" stroke="url(#logoGradLine)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <defs>
+        <linearGradient id="logoGradCircle" x1="4" y1="4" x2="32" y2="32">
+          <stop offset="0%" stop-color="#4A7CF7"/>
+          <stop offset="100%" stop-color="#1CB98A"/>
+        </linearGradient>
+        <linearGradient id="logoGradBg" x1="4" y1="4" x2="32" y2="32">
+          <stop offset="0%" stop-color="#2563EB"/>
+          <stop offset="100%" stop-color="#1e6db5"/>
+        </linearGradient>
+        <linearGradient id="logoGradBar" x1="0" y1="0" x2="0" y2="1" gradientUnits="objectBoundingBox">
+          <stop offset="0%" stop-color="#60C8F5"/>
+          <stop offset="100%" stop-color="#1CB98A"/>
+        </linearGradient>
+        <linearGradient id="logoGradLine" x1="11" y1="13" x2="26" y2="22">
+          <stop offset="0%" stop-color="#1CB98A"/>
+          <stop offset="100%" stop-color="#60C8F5"/>
+        </linearGradient>
+      </defs>
+    </svg>
+    <span class="sidebar-logo-text">SiteTuation</span>
+  </div>
+
+  <!-- Toggle button -->
+  <div class="sidebar-toggle" onclick="toggleSidebar()" title="Toggle panel">
+    <svg id="toggleIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path d="M9 18l6-6-6-6"/>
+    </svg>
+  </div>
+
+  <!-- Panel image (shown when expanded) -->
+  <div class="sidebar-panel-img">
+    <img src="Frame_10.png" alt="SiteTuation Panel" onerror="this.style.display='none'" />
+  </div>
+
+  <!-- Nav items -->
+  <div class="sidebar-nav-row" title="Dashboard">
+    <div class="sidebar-icon active">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+    </div>
+    <span class="nav-label">New Tab</span>
+  </div>
+
+  <div class="sidebar-nav-row" title="Search History">
+    <div class="sidebar-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+    </div>
+    <span class="nav-label">Search History</span>
+  </div>
+
+  <div class="sidebar-nav-row" title="Favorites">
+    <div class="sidebar-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
+    </div>
+    <span class="nav-label">Favorites</span>
+  </div>
+
+  <!-- Saves section (expanded only) -->
+  <div class="sidebar-saves">
+    <div class="saves-title">Saves:</div>
+    <div class="save-item">123 Altura Ext. 456 Sta. Mesa...</div>
+    <div class="save-item">...</div>
+  </div>
+
+  <!-- Avatar -->
+  <div class="sidebar-avatar-row">
+    <div class="sidebar-avatar">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    </div>
+    <div class="avatar-info">
+      <div class="avatar-name">Username</div>
+      <div class="avatar-plan">Free</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Topbar ─────────────────────────────────────────────────────── -->
+<div class="topbar" id="topbar">
+  <!-- SiteTuation logo matching brand identity -->
+  <div class="logo-wrap">
+    <svg class="logo-icon-svg" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M20 3 C11.163 3 4 10.163 4 19 C4 25 7.2 30.3 12 33.2 L20 38 L28 33.2 C32.8 30.3 36 25 36 19 C36 10.163 28.837 3 20 3Z" fill="url(#tbLogoGradBg)"/>
+      <rect x="12" y="20" width="4" height="9" rx="1.2" fill="url(#tbLogoGradBar)"/>
+      <rect x="18" y="14" width="4" height="15" rx="1.2" fill="url(#tbLogoGradBar)"/>
+      <rect x="24" y="10" width="4" height="19" rx="1.2" fill="url(#tbLogoGradBar)"/>
+      <path d="M12 24 L17 18 L22 21.5 L29 14" stroke="url(#tbLogoGradLine)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M26 14 L29 14 L29 17" stroke="url(#tbLogoGradLine)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      <defs>
+        <linearGradient id="tbLogoGradBg" x1="4" y1="3" x2="36" y2="38">
+          <stop offset="0%" stop-color="#2563EB"/>
+          <stop offset="100%" stop-color="#1e6db5"/>
+        </linearGradient>
+        <linearGradient id="tbLogoGradBar" x1="0" y1="0" x2="0" y2="1" gradientUnits="objectBoundingBox">
+          <stop offset="0%" stop-color="#60C8F5"/>
+          <stop offset="100%" stop-color="#1CB98A"/>
+        </linearGradient>
+        <linearGradient id="tbLogoGradLine" x1="12" y1="14" x2="29" y2="24">
+          <stop offset="0%" stop-color="#1CB98A"/>
+          <stop offset="100%" stop-color="#60C8F5"/>
+        </linearGradient>
+      </defs>
+    </svg>
+    <span class="logo-text">Site<span>Tuation</span></span>
+  </div>
+
+  <div class="d-flex gap-2 align-items-center">
+    <div class="credit-badge">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+      <span id="creditDisplay">150</span>
+    </div>
+    <a href="/plans" class="btn-upgrade">Upgrade</a>
+  </div>
+</div>
+
+<!-- ── Main Content ───────────────────────────────────────────────── -->
+<div class="main" id="mainContent">
+  <!-- Map side -->
+  <div class="map-side">
+    <div class="search-bar">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#9AA4B8" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      <input type="text" id="addressInput" placeholder="Search address..." value="123 Altura Ext. 456 Sta. Mesa, Manila" />
+    </div>
+    <div id="map"></div>
+  </div>
+
+  <!-- Panel -->
+  <div class="panel">
+    <div class="d-flex align-items-center justify-content-between">
+      <div class="panel-title">Location SiteTuation</div>
+      <div id="planBadge" class="plan-badge free-badge">Free Plan</div>
+    </div>
+
+    <div class="field-row">
+      <div class="field-group">
+        <div class="field-label">City</div>
+        <div class="field-input" id="cityField">Manila</div>
+      </div>
+      <div class="field-group">
+        <div class="field-label">Barangay</div>
+        <div class="field-input" id="barangayField">456</div>
+      </div>
+    </div>
+    <div class="gen-row">
+      <div class="gen-cost">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+        50
+      </div>
+      <button class="btn-generate" onclick="handleGenerate()">Generate</button>
+    </div>
+
+    <!-- Location & Market Data -->
+    <div class="section">
+      <div class="section-header" onclick="toggleSection('locSection','locChevron')">
+        <svg id="locChevron" class="section-chevron open" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 15l-6-6-6 6"/></svg>
+        <h3>Location &amp; Market Data</h3>
+      </div>
+      <div id="locSection" class="section-body">
+        <div>
+          <div class="stat-label" style="margin-bottom:8px;">Population:</div>
+          <div class="stat-row" style="margin-bottom:6px;">
+            <span class="stat-label">City:</span>
+            <span class="stat-value">10,576</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Barangay:</span>
+            <span class="stat-value">1,345</span>
+          </div>
+        </div>
+        <div>
+          <div class="stat-label" style="margin-bottom:6px;">Area Estimate Foot Traffic:</div>
+          <div id="footTrafficWidget"></div>
+        </div>
+        <div id="nearbySection">
+          <div class="stat-label" style="margin-bottom:6px;">Nearby Establishments:</div>
+          <div id="nearbyWidget"></div>
+        </div>
+        <div id="transportSection" style="display:none;">
+          <div class="field-row" style="gap:10px;">
+            <div style="flex:1;">
+              <div class="stat-label" style="margin-bottom:6px;">Transportation Stations:</div>
+              <div style="background:#F4F6FA;border-radius:10px;padding:14px;font-size:13px;color:#1A2340;font-weight:700;">LRT-2 Pureza (320m), Jeepney Terminal (150m)</div>
+            </div>
+            <div style="flex:1;">
+              <div class="stat-label" style="margin-bottom:6px;">Residential Establishments:</div>
+              <div style="background:#F4F6FA;border-radius:10px;padding:14px;font-size:13px;color:#1A2340;font-weight:700;">8 Condos, 23 Subdivisions nearby</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Competitor Data -->
+    <div class="section">
+      <div class="section-header" onclick="toggleSection('compSection','compChevron')">
+        <svg id="compChevron" class="section-chevron open" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 15l-6-6-6 6"/></svg>
+        <h3>Competitor Data</h3>
+      </div>
+      <div id="compSection" class="section-body">
+        <div>
+          <div class="stat-label" style="margin-bottom:6px;">Industry:</div>
+          <select class="styled-select" id="industrySelect">
+            <option>Restaurants</option><option>Retail</option><option>Cafes</option><option>Pharmacies</option><option>Salons</option>
+          </select>
+        </div>
+        <div id="competitorList"></div>
+      </div>
+    </div>
+
+    <!-- Safety & Risk Factors -->
+    <div class="section">
+      <div class="section-header" onclick="toggleSection('safetySection','safetyChevron')">
+        <svg id="safetyChevron" class="section-chevron open" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 15l-6-6-6 6"/></svg>
+        <h3>Safety &amp; Risk Factors
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#4A7CF7" stroke-width="2" style="vertical-align:middle;margin-left:4px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </h3>
+      </div>
+      <div id="safetySection" class="section-body">
+        <div id="safetyWidget"></div>
+      </div>
+    </div>
+
+    <!-- AI Summary -->
+    <div class="section">
+      <div class="section-header" onclick="toggleSection('aiSection','aiChevron')">
+        <svg id="aiChevron" class="section-chevron open" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 15l-6-6-6 6"/></svg>
+        <h3>AI Summary
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#4A7CF7" stroke-width="2" style="vertical-align:middle;margin-left:4px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </h3>
+      </div>
+      <div id="aiSection" class="section-body">
+        <div id="aiWidget"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast" style="position:fixed;bottom:30px;right:30px;background:#1A2340;color:#fff;padding:14px 22px;border-radius:12px;font-weight:700;font-size:14px;display:none;z-index:999;box-shadow:0 8px 32px rgba(0,0,0,.18);"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // ── Sidebar toggle ──────────────────────────────────────────────────────────
+  let sidebarExpanded = false;
+  function toggleSidebar() {
+    sidebarExpanded = !sidebarExpanded;
+    const sidebar     = document.getElementById('sidebar');
+    const topbar      = document.getElementById('topbar');
+    const mainContent = document.getElementById('mainContent');
+    const icon        = document.getElementById('toggleIcon');
+
+    sidebar.classList.toggle('expanded', sidebarExpanded);
+    topbar.classList.toggle('sidebar-open', sidebarExpanded);
+    mainContent.classList.toggle('sidebar-open', sidebarExpanded);
+
+    // Rotate arrow
+    icon.innerHTML = sidebarExpanded
+      ? '<path d="M15 18l-6-6 6-6"/>'
+      : '<path d="M9 18l6-6-6-6"/>';
+  }
+
+  // ── State ────────────────────────────────────────────────────────────────────
+  let currentPlan = '{{ current_plan | default("free") }}';
+  if (currentPlan.includes('{')) currentPlan = 'free';
+
+  let credits = ({ free: 150, plus: 650, pro: 2000 })[currentPlan] || 150;
+  let generated = false;
+
+  const planConfig = {
+    free: { label: 'Free Plan',  badgeClass: 'free-badge',  nearbyCount: 3,  hasAll: false, hasSafety: false, hasAI: false, hasTransport: false },
+    plus: { label: 'Plus Plan',  badgeClass: 'plus-badge',  nearbyCount: 10, hasAll: true,  hasSafety: true,  hasAI: false, hasTransport: true  },
+    pro:  { label: 'Pro Plan',   badgeClass: 'pro-badge',   nearbyCount: 99, hasAll: true,  hasSafety: true,  hasAI: true,  hasTransport: true  },
+  };
+
+  const mockCompetitors = [
+    { name: "Jollibee Sta. Mesa",   dist: "200m"  },
+    { name: "McDonald's PUP",       dist: "420m"  },
+    { name: "Chowking Legarda",     dist: "1km"   },
+    { name: "KFC Rotonda",          dist: "1.4km" },
+    { name: "Shakey's Legarda",     dist: "1.6km" },
+    { name: "Max's Restaurant",     dist: "1.9km" },
+    { name: "Mang Inasal PUP",      dist: "2.1km" },
+    { name: "Greenwich Santa Mesa", dist: "2.3km" },
+    { name: "Tokyo Tokyo",          dist: "2.5km" },
+    { name: "Goldilocks Oroquieta", dist: "2.8km" },
+  ];
+
+  const safetyData = {
+    "City's Criminal Index": "Low (2.1/10)",
+    "Flood Rate":            "Moderate",
+    "Earthquake Rate":       "Low-Moderate",
+    "Tsunami Rate":          "Negligible",
+  };
+
+  // ── Render panel ─────────────────────────────────────────────────────────────
+  function renderPanel() {
+    const cfg = planConfig[currentPlan];
+    const badge = document.getElementById('planBadge');
+    badge.className = 'plan-badge ' + cfg.badgeClass;
+    badge.textContent = cfg.label;
+    document.getElementById('creditDisplay').textContent = credits;
+
+    const ftw = document.getElementById('footTrafficWidget');
+    if (cfg.hasAll) {
+      ftw.innerHTML = `
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+          <span style="font-size:13px;font-weight:700;color:#1A2340;">High</span>
+          <span style="font-size:12px;color:#9AA4B8;">~3,200 / day</span>
+        </div>
+        <div class="traffic-bar"><div class="traffic-fill" style="width:78%"></div></div>`;
+    } else {
+      ftw.innerHTML = `<div class="premium-field"><span style="font-size:12px;color:#9AA4B8;font-weight:600;">Upgrade to view</span><span class="premium-icon">💎</span></div>`;
+    }
+
+    const nb = document.getElementById('nearbyWidget');
+    if (generated) {
+      const items = ["7-Eleven","SM Hypermarket","Mercury Drug","Robinsons Supermarket","Alfamart","Ministop","Watsons","Family Mart","Puregold","National Bookstore"].slice(0, Math.min(cfg.nearbyCount, 10));
+      nb.innerHTML = `<div style="background:#F4F6FA;border-radius:10px;padding:10px 14px;">
+        ${items.map(i=>`<div style="font-size:13px;color:#1A2340;font-weight:600;padding:4px 0;border-bottom:1px solid #E8ECF2;">${i}</div>`).join('')}
+        ${cfg.nearbyCount < 10 ? `<div style="font-size:11px;color:#4A7CF7;font-weight:700;margin-top:8px;text-align:right;">Upgrade Plan for more.</div>` : ''}
+      </div>`;
+    } else if (!cfg.hasAll) {
+      nb.innerHTML = `<div class="upgrade-gate"><p>Upgrade Plan for advanced features.</p><a href="/plans" class="btn-upgrade-small">Upgrade</a></div>`;
+    } else {
+      nb.innerHTML = `<div class="upgrade-gate" style="background:#EEF2FF;"><p style="color:#4A7CF7;">Click Generate to load nearby establishments.</p></div>`;
+    }
+
+    document.getElementById('transportSection').style.display = cfg.hasTransport ? 'block' : 'none';
+
+    const cl = document.getElementById('competitorList');
+    const showCount = generated ? cfg.nearbyCount : 3;
+    cl.innerHTML = mockCompetitors.slice(0, Math.min(showCount, mockCompetitors.length)).map((c, i) =>
+      `<div class="competitor-item"><span class="competitor-name">${i+1}. ${c.name}</span><span class="competitor-dist">${c.dist}</span></div>`
+    ).join('');
+    if (currentPlan === 'free' || !generated) {
+      cl.innerHTML += `<div style="font-size:11px;color:#4A7CF7;font-weight:700;text-align:right;margin-top:4px;">Upgrade Plan for more.</div>`;
+    }
+
+    const sw = document.getElementById('safetyWidget');
+    if (cfg.hasSafety) {
+      sw.innerHTML = Object.entries(safetyData).map(([k,v]) => `
+        <div class="stat-row">
+          <span class="stat-label">${k}:</span>
+          <span class="stat-value">${v}</span>
+        </div>`).join('');
+    } else {
+      sw.innerHTML = Object.keys(safetyData).map(k => `
+        <div>
+          <div class="stat-label" style="margin-bottom:4px;">${k}:</div>
+          <div class="premium-field"><span style="font-size:12px;color:#9AA4B8;font-weight:600;">Upgrade to view</span><span class="premium-icon">💎</span></div>
+        </div>`).join('');
+    }
+
+    const aw = document.getElementById('aiWidget');
+    if (cfg.hasAI) {
+      aw.innerHTML = `
+        <div class="stat-label" style="margin-bottom:6px;">Suggested Business Industry:</div>
+        <div style="background:#F4F6FA;border-radius:10px;padding:14px;font-size:13px;color:#1A2340;font-weight:600;line-height:1.6;">
+          Based on the foot traffic (3,200/day), nearby university presence (PUP), and competitor landscape, we suggest: <strong>Fast Casual Dining</strong>, <strong>Study Cafes</strong>, or <strong>Convenience Stores</strong>.
+        </div>`;
+    } else {
+      aw.innerHTML = `
+        <div class="stat-label" style="margin-bottom:6px;">Suggested Business Industry:</div>
+        <div class="upgrade-gate"><p>Upgrade Plan for advanced features.</p><a href="/plans" class="btn-upgrade-small">Upgrade</a></div>`;
+    }
+  }
+
+  function handleGenerate() {
+    if (credits < 50) { showToast('Insufficient credits!'); return; }
+    credits -= 50;
+    generated = true;
+    renderPanel();
+    showToast('Report generated! 50 credits used.');
+  }
+
+  function toggleSection(sectionId, chevronId) {
+    const sec  = document.getElementById(sectionId);
+    const chev = document.getElementById(chevronId);
+    const hidden = sec.style.display === 'none';
+    sec.style.display = hidden ? '' : 'none';
+    chev.classList.toggle('open', hidden);
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.style.display = 'block';
+    setTimeout(() => t.style.display = 'none', 2800);
+  }
+
+  function initMap() {
+    const loc = { lat: 14.5997, lng: 120.9842 };
+    const map = new google.maps.Map(document.getElementById('map'), {
+      center: loc, zoom: 16,
+      mapTypeControl: false, streetViewControl: false, fullscreenControl: false,
+    });
+    new google.maps.Marker({ position: loc, map, title: '123 Altura Ext.' });
+
+    const input    = document.getElementById('addressInput');
+    const geocoder = new google.maps.Geocoder();
+    input.addEventListener('keydown', e => {
+      if (e.key !== 'Enter') return;
+      geocoder.geocode({ address: input.value + ', Philippines' }, (res, status) => {
+        if (status !== 'OK') return;
+        map.setCenter(res[0].geometry.location);
+        map.setZoom(17);
+        new google.maps.Marker({ position: res[0].geometry.location, map });
+        const comp = res[0].address_components;
+        document.getElementById('cityField').textContent     = comp.find(c=>c.types.includes('locality'))?.short_name || 'Manila';
+        document.getElementById('barangayField').textContent = comp.find(c=>c.types.includes('sublocality_level_1'))?.short_name || '—';
+      });
+    });
+  }
+  window.initMap = initMap;
+
+  renderPanel();
+</script>
+
+<script>
+(function() {
+  const s = document.createElement('script');
+  s.src = 'https://maps.googleapis.com/maps/api/js?callback=initMap';
+  s.async = true; s.defer = true;
+  s.onerror = function() {
+    document.getElementById('map').innerHTML = `
+      <iframe src="https://www.openstreetmap.org/export/embed.html?bbox=120.972%2C14.592%2C120.996%2C14.608&layer=mapnik&marker=14.5997%2C120.9842"
+        style="width:100%;height:100%;border:none;border-radius:16px;" allowfullscreen></iframe>`;
+  };
+  document.head.appendChild(s);
+})();
+</script>
+
+</body>
 </html>

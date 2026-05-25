@@ -1,13 +1,280 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <title>SiteTuation</title>
+  <title>SiteTuation – Upgrade Your Plan</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    * { font-family: 'Plus Jakarta Sans', sans-serif; }
+    body { background: #F4F6FA; min-height: 100vh; margin: 0; }
+
+    /* Tab pill */
+    .tab-pill { display: flex; background: #E8ECF2; border-radius: 30px; padding: 4px; gap: 4px; }
+    .tab-btn { padding: 9px 40px; border-radius: 24px; font-weight: 700; font-size: 14px; border: none; cursor: pointer; transition: .2s; color: #9AA4B8; background: transparent; }
+    .tab-btn.active { background: #4A7CF7; color: #fff; }
+
+    /* Plan cards */
+    .plan-card { border-radius: 20px; padding: 30px 24px; display: flex; flex-direction: column; gap: 14px; transition: .2s; height: 100%; }
+    .plan-card.free { background: #F4F6FA; border: 2px solid #E8ECF2; }
+    .plan-card.plus { background: #4A7CF7; color: #fff; }
+    .plan-card.pro  { background: #1CB98A; color: #fff; }
+    .plan-name  { font-size: 14px; font-weight: 700; opacity: .75; }
+    .plan-price { font-size: 38px; font-weight: 800; line-height: 1; }
+    .plan-price span { font-size: 15px; font-weight: 600; opacity: .7; }
+    .plan-credits-badge { display: flex; align-items: center; gap: 8px; border-radius: 10px; padding: 9px 14px; font-size: 13px; font-weight: 700; }
+    .plan-credits-badge.light { background: #fff; color: #1A2340; }
+    .plan-credits-badge.dark  { background: rgba(255,255,255,.2); color: #fff; }
+    .feature-label { font-size: 11px; font-weight: 700; opacity: .65; text-transform: uppercase; letter-spacing: .6px; margin-top: 6px; }
+    .feature-item { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; }
+    .check-icon { flex-shrink: 0; }
+    .plan-btn { margin-top: auto; border-radius: 12px; padding: 13px; font-weight: 700; font-size: 14px; border: none; cursor: pointer; transition: .2s; width: 100%; text-align: center; }
+    .plan-btn.current { background: #6B7280; color: #fff; cursor: default; }
+    .plan-btn.white-btn { background: #fff; color: #1A2340; }
+    .plan-btn.white-btn:hover { background: #f0f0f0; }
+
+    /* Credit cards */
+    .credit-card { border-radius: 16px; overflow: hidden; border: 2px solid #E8ECF2; transition: .2s; }
+    .credit-card:hover { border-color: #4A7CF7; box-shadow: 0 4px 20px rgba(74,124,247,.12); }
+    .credit-card.featured { border-color: #1CB98A; }
+    .credit-top { padding: 28px 20px; display: flex; align-items: center; gap: 10px; font-size: 30px; font-weight: 800; color: #1A2340; }
+    .credit-top.blue-bg  { background: #EEF2FF; }
+    .credit-top.green-bg { background: #E6FAF4; }
+    .credit-bottom { padding: 12px 18px; display: flex; align-items: center; justify-content: space-between; }
+    .credit-bottom.blue-bottom  { background: #4A7CF7; }
+    .credit-bottom.green-bottom { background: #1CB98A; }
+    .credit-price { font-size: 14px; color: #fff; font-weight: 700; }
+    .btn-purchase { background: #fff; border: none; border-radius: 8px; padding: 7px 18px; font-weight: 700; font-size: 13px; cursor: pointer; transition: .2s; }
+    .btn-purchase:hover { background: #f0f0f0; }
+
+    /* Toast */
+    #toast { position: fixed; bottom: 30px; right: 30px; background: #1A2340; color: #fff; padding: 14px 22px; border-radius: 12px; font-weight: 700; font-size: 14px; display: none; z-index: 999; box-shadow: 0 8px 32px rgba(0,0,0,.18); }
+  </style>
 </head>
-
 <body>
-    <h1>SiteTuation</h1>
-    <p>This is the plans and credits</p>
-</body>
 
+<div class="py-5 px-3">
+
+  <!-- Header -->
+  <div class="text-center mb-5">
+    <h1 style="font-size:28px;font-weight:800;color:#1A2340;">Upgrade your plan</h1>
+  </div>
+
+  <!-- Tab toggle -->
+  <div class="d-flex justify-content-center mb-5">
+    <div class="tab-pill">
+      <button class="tab-btn active" id="tabPlans" onclick="switchTab('plans')">Plans</button>
+      <button class="tab-btn" id="tabCredits" onclick="switchTab('credits')">Credits</button>
+    </div>
+  </div>
+
+  <!-- ── PLANS ───────────────────────────────────────────────────── -->
+  <div id="plansContent" class="container" style="max-width:900px;">
+    <div class="row g-4">
+
+      <!-- Free -->
+      <div class="col-12 col-md-4">
+        <div class="plan-card free">
+          <div class="plan-name" style="color:#6B7280;">Free</div>
+          <div class="plan-price" style="color:#1A2340;">0<span>php</span></div>
+          <div class="plan-credits-badge light">
+            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="none" viewBox="0 0 24 24" stroke="#4A7CF7" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+            No Monthly Credits (150 free)
+          </div>
+          <div class="feature-label" style="color:#6B7280;">SiteTuation Data:</div>
+          <div class="feature-item" style="color:#1A2340;">
+            <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="none" viewBox="0 0 24 24" stroke="#1CB98A" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+            Population Size
+          </div>
+          <div class="feature-item" style="color:#1A2340;">
+            <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="none" viewBox="0 0 24 24" stroke="#1CB98A" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+            3 Nearby Business
+          </div>
+          <div class="feature-label" style="color:#6B7280;margin-top:4px;">Account:</div>
+          <div class="feature-item" style="color:#1A2340;">
+            <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="none" viewBox="0 0 24 24" stroke="#1CB98A" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+            1 save
+          </div>
+          <button class="plan-btn current" id="freePlanBtn">Current Plan</button>
+        </div>
+      </div>
+
+      <!-- Plus -->
+      <div class="col-12 col-md-4">
+        <div class="plan-card plus">
+          <div class="plan-name">Plus</div>
+          <div class="plan-price">600<span>php / month</span></div>
+          <div class="plan-credits-badge dark">
+            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+            650 Credits per month
+          </div>
+          <div class="feature-label">SiteTuation Data:</div>
+          <div class="feature-item">
+            <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+            All data
+          </div>
+          <div class="feature-item">
+            <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+            10 Nearby Businesses
+          </div>
+          <div class="feature-label" style="margin-top:4px;">Account:</div>
+          <div class="feature-item">
+            <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+            5 saves
+          </div>
+          <button class="plan-btn white-btn" id="plusPlanBtn" onclick="selectPlan('plus')">Upgrade to Plus</button>
+        </div>
+      </div>
+
+      <!-- Pro -->
+      <div class="col-12 col-md-4">
+        <div class="plan-card pro">
+          <div class="plan-name">Pro</div>
+          <div class="plan-price">1,000<span>php</span></div>
+          <div class="plan-credits-badge dark">
+            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+            2,000 Credits per month
+          </div>
+          <div class="feature-label">SiteTuation Data:</div>
+          <div class="feature-item">
+            <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+            All data
+          </div>
+          <div class="feature-item">
+            <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+            Unlimited Uses
+          </div>
+          <div class="feature-label" style="margin-top:4px;">Account:</div>
+          <div class="feature-item">
+            <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+            Unlimited saves
+          </div>
+          <button class="plan-btn white-btn" id="proPlanBtn" onclick="selectPlan('pro')">Upgrade to Pro</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── CREDITS ──────────────────────────────────────────────────── -->
+  <div id="creditsContent" class="container" style="max-width:900px;display:none;">
+    <div class="row g-4">
+
+      <!-- 100 credits -->
+      <div class="col-12 col-sm-6 col-md-3">
+        <div class="credit-card">
+          <div class="credit-top blue-bg">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#4A7CF7" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+            100
+          </div>
+          <div class="credit-bottom blue-bottom">
+            <span class="credit-price">150 php</span>
+            <button class="btn-purchase" onclick="buyCredits(100, 150)">Purchase</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 300 credits -->
+      <div class="col-12 col-sm-6 col-md-3">
+        <div class="credit-card">
+          <div class="credit-top blue-bg">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#4A7CF7" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+            300
+          </div>
+          <div class="credit-bottom blue-bottom">
+            <span class="credit-price">300 php</span>
+            <button class="btn-purchase" onclick="buyCredits(300, 300)">Purchase</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 500 credits -->
+      <div class="col-12 col-sm-6 col-md-3">
+        <div class="credit-card">
+          <div class="credit-top blue-bg">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#4A7CF7" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+            500
+          </div>
+          <div class="credit-bottom blue-bottom">
+            <span class="credit-price">450 php</span>
+            <button class="btn-purchase" onclick="buyCredits(500, 450)">Purchase</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1000 credits (featured) -->
+      <div class="col-12 col-sm-6 col-md-3">
+        <div class="credit-card featured">
+          <div class="credit-top green-bg">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#1CB98A" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+            1000
+          </div>
+          <div class="credit-bottom green-bottom">
+            <span class="credit-price">875 php</span>
+            <button class="btn-purchase" onclick="buyCredits(1000, 875)">Purchase</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- Toast -->
+<div id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  let currentPlan = '{{ current_plan | default("free") }}';
+  if (currentPlan.includes('{')) currentPlan = 'free';
+
+  function switchTab(tab) {
+    document.getElementById('tabPlans').classList.toggle('active', tab === 'plans');
+    document.getElementById('tabCredits').classList.toggle('active', tab === 'credits');
+    document.getElementById('plansContent').style.display  = tab === 'plans'   ? '' : 'none';
+    document.getElementById('creditsContent').style.display = tab === 'credits' ? '' : 'none';
+  }
+
+  function refreshPlanButtons() {
+    const plans = ['free', 'plus', 'pro'];
+    const labels = { free: 'Free', plus: 'Plus', pro: 'Pro' };
+    plans.forEach(p => {
+      const btn = document.getElementById(p + 'PlanBtn');
+      if (!btn) return;
+      if (p === currentPlan) {
+        btn.textContent = 'Current Plan';
+        btn.className = 'plan-btn current';
+        btn.onclick = null;
+      } else {
+        btn.textContent = (p === 'free' ? 'Downgrade to ' : 'Upgrade to ') + labels[p];
+        btn.className = 'plan-btn white-btn';
+        btn.onclick = () => selectPlan(p);
+      }
+    });
+  }
+
+  function selectPlan(plan) {
+    currentPlan = plan;
+    refreshPlanButtons();
+    const label = plan.charAt(0).toUpperCase() + plan.slice(1);
+    showToast(`Successfully ${plan === 'free' ? 'downgraded to' : 'upgraded to'} ${label} Plan!`);
+  }
+
+  function buyCredits(amount, price) {
+    showToast(`Purchased ${amount} credits for ${price} php!`);
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.style.display = 'block';
+    setTimeout(() => t.style.display = 'none', 2800);
+  }
+
+  refreshPlanButtons();
+</script>
+
+</body>
 </html>
