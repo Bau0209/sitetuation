@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SiteTuation – Turning Locations into Smart Decisions</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <!--
+    In your Flask project, replace the line below with:
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/landing.css') }}"/>
+  -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/landing.css') }}"/>
+</head>
+<body>
+
+<!-- ══════════════════ NAV ══════════════════ -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">
+    <!-- Logo SVG (same as main.html) -->
+    <svg width="30" height="30" viewBox="0 0 36 36" fill="none">
+      <circle cx="18" cy="18" r="17" fill="url(#lg1)" opacity=".15"/>
+      <path d="M18 4C10.268 4 4 10.268 4 18c0 5.2 2.8 9.8 7 12.2L18 34l7-3.8C29.2 27.8 32 23.2 32 18 32 10.268 25.732 4 18 4Z" fill="url(#lg2)"/>
+      <rect x="11" y="18" width="3.5" height="8" rx="1" fill="url(#lg3)"/>
+      <rect x="16.2" y="13" width="3.5" height="13" rx="1" fill="url(#lg3)"/>
+      <rect x="21.5" y="10" width="3.5" height="16" rx="1" fill="url(#lg3)"/>
+      <path d="M11 22l4.5-5 4 3L26 13" stroke="url(#lg4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M23 13h3v3" stroke="url(#lg4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <defs>
+        <linearGradient id="lg1" x1="4" y1="4" x2="32" y2="32"><stop stop-color="#4A7CF7"/><stop offset="1" stop-color="#1CB98A"/></linearGradient>
+        <linearGradient id="lg2" x1="4" y1="4" x2="32" y2="32"><stop stop-color="#2563EB"/><stop offset="1" stop-color="#1CB98A"/></linearGradient>
+        <linearGradient id="lg3" x1="12" y1="10" x2="25" y2="26"><stop stop-color="#fff" stop-opacity=".95"/><stop offset="1" stop-color="#E0EDFF"/></linearGradient>
+        <linearGradient id="lg4" x1="11" y1="13" x2="26" y2="22"><stop stop-color="#fff"/><stop offset="1" stop-color="#B8F0DC"/></linearGradient>
+      </defs>
+    </svg>
+    <span class="nav-logo-text">Site<span>Tuation</span></span>
+  </a>
+
+  <ul class="nav-links">
+    <li><a href="#how">How It Works</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+  </ul>
+
+  <div class="nav-right">
+    <!--
+      In Flask, change href to: href="{{ url_for('main.landingpage') }}"
+      or your login route as needed.
+    -->
+    <a href="{{ url_for('main.landingpage') }}" class="btn-nav-login">Log In</a>
+    <a href="{{ url_for('main.plans') }}" class="btn-nav-cta">
+      Get Started
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+  </div>
+</nav>
+
+<!-- ══════════════════ HERO ══════════════════ -->
+<section id="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+
+  <div class="hero-inner">
+    <!-- Left copy -->
+    <div>
+      <div class="hero-badge">
+        <span class="hero-badge-dot"></span>
+        AI-Powered Location Intelligence
+      </div>
+      <h1 class="hero-title">
+        Find the <em>perfect</em> location<br/>for your business.
+      </h1>
+      <p class="hero-sub">
+        SiteTuation combines population data, crime rates, disaster risk, and nearby competition into one smart platform — so you stop guessing and start deciding.
+      </p>
+      <div class="hero-actions">
+        <!--
+          In Flask: href="{{ url_for('main.landingpage') }}"
+        -->
+        <a href="main.html" class="btn-hero-primary">
+          Get Started Free
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="#how" class="btn-hero-ghost">See How It Works</a>
+      </div>
+
+      <div class="hero-stats">
+        <div class="reveal">
+          <div class="hero-stat-num">10+</div>
+          <div class="hero-stat-label">Data Layers</div>
+        </div>
+        <div class="reveal reveal-delay-1">
+          <div class="hero-stat-num">3</div>
+          <div class="hero-stat-label">Steps to Insight</div>
+        </div>
+        <div class="reveal reveal-delay-2">
+          <div class="hero-stat-num">AI</div>
+          <div class="hero-stat-label">Smart Reports</div>
+        </div>
+        <div class="reveal reveal-delay-3">
+          <div class="hero-stat-num">SaaS</div>
+          <div class="hero-stat-label">Web-Based</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right mockup -->
+    <div class="hero-mockup reveal reveal-delay-2">
+      <div class="mockup-shell">
+        <div class="mockup-topbar">
+          <div class="mockup-logo">
+            <svg width="20" height="20" viewBox="0 0 36 36" fill="none">
+              <path d="M18 4C10.268 4 4 10.268 4 18c0 5.2 2.8 9.8 7 12.2L18 34l7-3.8C29.2 27.8 32 23.2 32 18 32 10.268 25.732 4 18 4Z" fill="url(#ml1)"/>
+              <rect x="11" y="18" width="3.5" height="8" rx="1" fill="white" opacity=".9"/>
+              <rect x="16.2" y="13" width="3.5" height="13" rx="1" fill="white" opacity=".9"/>
+              <rect x="21.5" y="10" width="3.5" height="16" rx="1" fill="white" opacity=".9"/>
+              <defs><linearGradient id="ml1" x1="4" y1="4" x2="32" y2="32"><stop stop-color="#2563EB"/><stop offset="1" stop-color="#1CB98A"/></linearGradient></defs>
+            </svg>
+            Site<span>Tuation</span>
+          </div>
+          <div class="mockup-badges">
+            <div class="mockup-credit">🪙 150 credits</div>
+            <div class="mockup-upgrade">Upgrade</div>
+          </div>
+        </div>
+        <div class="mockup-body">
+          <div class="mockup-map">
+            <!-- Simplified map illustration -->
+            <svg width="100%" height="100%" viewBox="0 0 260 160" xmlns="http://www.w3.org/2000/svg">
+              <rect width="260" height="160" fill="#d4e8f0"/>
+              <!-- Roads -->
+              <line x1="0" y1="80" x2="260" y2="80" stroke="#c2d9e8" stroke-width="8"/>
+              <line x1="130" y1="0" x2="130" y2="160" stroke="#c2d9e8" stroke-width="8"/>
+              <line x1="0" y1="40" x2="260" y2="40" stroke="#d0e4f0" stroke-width="4"/>
+              <line x1="0" y1="120" x2="260" y2="120" stroke="#d0e4f0" stroke-width="4"/>
+              <line x1="65" y1="0" x2="65" y2="160" stroke="#d0e4f0" stroke-width="4"/>
+              <line x1="195" y1="0" x2="195" y2="160" stroke="#d0e4f0" stroke-width="4"/>
+              <!-- Blocks -->
+              <rect x="8" y="8" width="50" height="28" rx="3" fill="#b8d0e2" opacity=".7"/>
+              <rect x="70" y="8" width="55" height="28" rx="3" fill="#b8d0e2" opacity=".7"/>
+              <rect x="140" y="8" width="50" height="28" rx="3" fill="#b8d0e2" opacity=".7"/>
+              <rect x="8" y="46" width="50" height="28" rx="3" fill="#b8d0e2" opacity=".7"/>
+              <rect x="8" y="88" width="50" height="28" rx="3" fill="#b8d0e2" opacity=".7"/>
+              <rect x="140" y="88" width="50" height="28" rx="3" fill="#b8d0e2" opacity=".7"/>
+              <rect x="200" y="88" width="52" height="28" rx="3" fill="#b8d0e2" opacity=".7"/>
+              <!-- Green park -->
+              <rect x="70" y="88" width="55" height="62" rx="6" fill="#9dcfb5" opacity=".8"/>
+              <!-- Pin -->
+              <circle cx="130" cy="75" r="12" fill="#4A7CF7" opacity=".2"/>
+              <path d="M130 55 C123 55 117 61 117 68 C117 77 130 90 130 90 C130 90 143 77 143 68 C143 61 137 55 130 55Z" fill="#E53E3E"/>
+              <circle cx="130" cy="68" r="4" fill="white"/>
+            </svg>
+          </div>
+          <div class="mockup-panel">
+            <div class="mockup-panel-title">Location SiteTuation</div>
+            <div class="mockup-stat">
+              <span class="mockup-stat-label">City Pop.</span>
+              <span class="mockup-stat-value">10,576</span>
+            </div>
+            <div class="mockup-stat">
+              <span class="mockup-stat-label">Barangay</span>
+              <span class="mockup-stat-value">1,345</span>
+            </div>
+            <div style="font-size:9px;color:#9AA4B8;font-weight:700;margin-top:4px;">Foot Traffic</div>
+            <div class="mockup-bar"><div class="mockup-bar-fill" style="width:65%"></div></div>
+            <div style="font-size:9px;color:#9AA4B8;font-weight:700;margin-top:4px;">Risk Score</div>
+            <div class="mockup-bar"><div class="mockup-bar-fill" style="width:35%;background:linear-gradient(90deg,#1CB98A,#4A7CF7)"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ HOW IT WORKS ══════════════════ -->
+<section id="how">
+  <div class="how-inner">
+    <div class="how-head">
+      <span class="section-label reveal">How It Works</span>
+      <h2 class="section-title reveal">Three steps to your ideal location</h2>
+      <p class="section-sub reveal">No spreadsheets. No consultants. Just enter an address and let SiteTuation do the work.</p>
+    </div>
+    <div class="steps-grid">
+      <div class="step-card reveal">
+        <div class="step-num">01</div>
+        <div class="step-icon-wrap"></div>
+        <h3>Select a Location</h3>
+        <p>Enter any Philippine address into the SiteTuation search bar. The map instantly pins your location and loads all available geographic context.</p>
+      </div>
+      <div class="step-card reveal reveal-delay-1">
+        <div class="step-num">02</div>
+        <div class="step-icon-wrap"></div>
+        <h3>Analyze the Data</h3>
+        <p>The platform analyzes population density, crime rates, disaster risk levels, nearby competitors, foot traffic, and infrastructure — all at once.</p>
+      </div>
+      <div class="step-card reveal reveal-delay-2">
+        <div class="step-num">03</div>
+        <div class="step-icon-wrap"></div>
+        <h3>Get Smart Recommendations</h3>
+        <p>Our AI generates a risk score and a clear, easy-to-read report so you can make confident, data-backed business decisions.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ FEATURES ══════════════════ -->
+<section id="features">
+  <div class="features-inner">
+    <div class="reveal">
+      <span class="section-label">Features</span>
+      <h2 class="section-title">Everything you need<br/>to <em>choose wisely</em></h2>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card reveal">
+        <div class="feature-icon blue">🏙️</div>
+        <div class="feature-body">
+          <h3>Population & Demographics</h3>
+          <p>Access city and barangay-level population figures, consumer density, and age profiles to understand your potential customer base before committing.</p>
+        </div>
+      </div>
+      <div class="feature-card reveal reveal-delay-1">
+        <div class="feature-icon blue">🛡️</div>
+        <div class="feature-body">
+          <h3>Crime & Safety Index</h3>
+          <p>Incident data is overlaid directly on the map so you can see safety conditions at a glance — not just a number, but context you can act on.</p>
+        </div>
+      </div>
+      <div class="feature-card reveal reveal-delay-2">
+        <div class="feature-icon teal">🌊</div>
+        <div class="feature-body">
+          <h3>Disaster Risk Levels</h3>
+          <p>Flood zones, earthquake fault lines, and typhoon exposure data are integrated from government sources and displayed per location automatically.</p>
+        </div>
+      </div>
+      <div class="feature-card reveal reveal-delay-3">
+        <div class="feature-icon green">🏪</div>
+        <div class="feature-body">
+          <h3>Competitor Mapping</h3>
+          <p>See nearby businesses in your industry, their distance, and market saturation. Understand whether the area is underserved or crowded before you sign a lease.</p>
+        </div>
+      </div>
+      <div class="feature-card full reveal">
+        <div class="feature-icon purple">✨</div>
+        <div class="feature-body">
+          <h3>AI Summary & Recommendations</h3>
+          <p>After analysis, our AI synthesizes all data points into a human-readable summary with a risk score and an actionable recommendation — so you spend less time interpreting and more time deciding. Available on Plus and Pro plans.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ ABOUT ══════════════════ -->
+<section id="about">
+  <div class="about-inner">
+    <div class="about-visual reveal">
+      <div class="about-feature">
+        <span class="about-feature-icon">🏙️</span>
+        <div>
+          <strong>Population & Demographics</strong>
+          <p>City & barangay density, consumer profiles.</p>
+        </div>
+      </div>
+      <div class="about-feature">
+        <span class="about-feature-icon">🛡️</span>
+        <div>
+          <strong>Crime & Safety Index</strong>
+          <p>Incident-level data overlaid on your location.</p>
+        </div>
+      </div>
+      <div class="about-feature">
+        <span class="about-feature-icon">🌊</span>
+        <div>
+          <strong>Disaster Risk Levels</strong>
+          <p>Flood, earthquake, and typhoon risk maps.</p>
+        </div>
+      </div>
+      <div class="about-feature">
+        <span class="about-feature-icon">🏪</span>
+        <div>
+          <strong>Business Competition</strong>
+          <p>Nearby rivals, distance, and market saturation.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="about-copy">
+      <span class="section-label reveal">About Us</span>
+      <h2 class="section-title reveal">Built for entrepreneurs<br/>who make <em>bold moves</em></h2>
+      <p class="reveal">SiteTuation is a web-based Business Intelligence platform operating under a SaaS model, purpose-built to eliminate the guesswork from business location selection.</p>
+      <p class="reveal">We integrate government datasets, real-time APIs, and AI models into a single accessible interface — so entrepreneurs, startup founders, and SME owners can make smarter decisions without hiring expensive consultants.</p>
+      <div class="about-tags reveal">
+        <span class="about-tag">Entrepreneurs</span>
+        <span class="about-tag">SME Owners</span>
+        <span class="about-tag">Startup Founders</span>
+        <span class="about-tag">Business Students</span>
+        <span class="about-tag">Consultants</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ PRICING ══════════════════ -->
+<section id="pricing">
+  <div class="pricing-inner">
+    <div class="pricing-head">
+      <span class="section-label reveal">Pricing</span>
+      <h2 class="section-title reveal">Simple plans for every stage</h2>
+      <p class="section-sub reveal">Start free. Scale as you grow. No hidden fees.</p>
+    </div>
+
+    <div class="pricing-grid">
+      <!-- Free -->
+      <div class="plan-card free reveal">
+        <div class="plan-name" style="color:#6B7280;">Free</div>
+        <div class="plan-price" style="color:#1A2340;">0<span> php</span></div>
+        <div class="plan-credits-badge light">
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#4A7CF7" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+          No Monthly Credits (150 free)
+        </div>
+        <div class="feature-label" style="color:#6B7280;">SiteTuation Data:</div>
+        <div class="feature-item" style="color:#1A2340;">
+          <svg class="check-icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#1CB98A" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+          Population Size
+        </div>
+        <div class="feature-item" style="color:#1A2340;">
+          <svg class="check-icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#1CB98A" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+          3 Nearby Businesses
+        </div>
+        <div class="feature-label" style="color:#6B7280;margin-top:4px;">Account:</div>
+        <div class="feature-item" style="color:#1A2340;">
+          <svg class="check-icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#1CB98A" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+          1 save
+        </div>
+        <a href="main.html" class="plan-btn outline-btn">Get Started Free</a>
+      </div>
+
+      <!-- Plus -->
+      <div class="plan-card plus reveal reveal-delay-1">
+        <div class="plan-name">Plus</div>
+        <div class="plan-price">600<span> php / month</span></div>
+        <div class="plan-credits-badge dark">
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+          650 Credits per month
+        </div>
+        <div class="feature-label">SiteTuation Data:</div>
+        <div class="feature-item">
+          <svg class="check-icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+          All data
+        </div>
+        <div class="feature-item">
+          <svg class="check-icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+          10 Nearby Businesses
+        </div>
+        <div class="feature-label" style="margin-top:4px;">Account:</div>
+        <div class="feature-item">
+          <svg class="check-icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+          5 saves
+        </div>
+        <!--
+          In Flask: href="{{ url_for('main.plans') }}"
+        -->
+        <a href="plans_and_credits.html" class="plan-btn white-btn">Upgrade to Plus</a>
+      </div>
+
+      <!-- Pro -->
+      <div class="plan-card pro reveal reveal-delay-2">
+        <div class="plan-name">Pro</div>
+        <div class="plan-price">1,000<span> php / month</span></div>
+        <div class="plan-credits-badge dark">
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+          2,000 Credits per month
+        </div>
+        <div class="feature-label">SiteTuation Data:</div>
+        <div class="feature-item">
+          <svg class="check-icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+          All data
+        </div>
+        <div class="feature-item">
+          <svg class="check-icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+          Unlimited Uses
+        </div>
+        <div class="feature-label" style="margin-top:4px;">Account:</div>
+        <div class="feature-item">
+          <svg class="check-icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+          Unlimited saves
+        </div>
+        <a href="plans_and_credits.html" class="plan-btn white-btn">Upgrade to Pro</a>
+      </div>
+    </div>
+
+    <p class="reveal" style="text-align:center;color:#4A5568;font-size:13px;margin-top:24px;">
+      All plans include a 14-day free trial on paid tiers. Cancel anytime. Prices in Philippine Peso (PHP).
+    </p>
+  </div>
+</section>
+
+<!-- ══════════════════ CTA ══════════════════ -->
+<section id="cta">
+  <div class="cta-glow"></div>
+  <div style="position:relative;z-index:1;max-width:680px;margin:0 auto;">
+    <span class="section-label reveal">Get Started</span>
+    <h2 class="section-title reveal">
+      Ready to make your<br/><em>smartest location decision?</em>
+    </h2>
+    <p class="cta-sub reveal">
+      Join entrepreneurs and business planners across the Philippines who choose data over guesswork. Sign up free — no credit card required.
+    </p>
+    <div class="cta-form reveal">
+      <input class="cta-input" type="email" id="ctaEmail" placeholder="Enter your email address"/>
+      <button class="btn-cta-submit" onclick="handleCTA()">Get Early Access</button>
+    </div>
+    <p class="cta-note reveal">🔒 We respect your privacy. No spam, ever.</p>
+    <div id="cta-success">🎉 You're on the list! We'll reach out soon.</div>
+
+    <div style="margin-top:40px;" class="reveal">
+      <p style="color:#6B7280;font-size:13px;margin-bottom:16px;">Or jump straight in →</p>
+      <!--
+        In Flask: href="{{ url_for('main.landingpage') }}"
+      -->
+      <a href="main.html" class="btn-hero-primary" style="display:inline-flex;margin:0 auto;">
+        Open SiteTuation Dashboard
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ FOOTER ══════════════════ -->
+<footer>
+  <div class="footer-logo">Site<span>Tuation</span></div>
+  <ul class="footer-links">
+    <li><a href="#how">How It Works</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="main.html">Dashboard</a></li>
+  </ul>
+  <p class="footer-copy">© 2025 SiteTuation · Turning Locations into Smart Decisions · Bautista · Geolligue · Modesto · Toyor</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Nav scroll
+  window.addEventListener('scroll', () => {
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  // Smooth scroll for anchor links
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); }
+    });
+  });
+
+  // CTA form
+  function handleCTA() {
+    const email = document.getElementById('ctaEmail').value.trim();
+    if (!email || !email.includes('@')) {
+      document.getElementById('ctaEmail').style.borderColor = '#E53E3E';
+      setTimeout(() => document.getElementById('ctaEmail').style.borderColor = '', 1400);
+      return;
+    }
+    document.getElementById('cta-success').style.display = 'block';
+    document.getElementById('ctaEmail').value = '';
+    document.querySelector('.btn-cta-submit').textContent = '✓ Signed Up!';
+    document.querySelector('.btn-cta-submit').style.background = '#1CB98A';
+  }
+</script>
+</body>
+</html>
