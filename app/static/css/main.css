@@ -111,6 +111,19 @@ body { background: var(--gray-bg); margin: 0; overflow-x: hidden; }
 .sidebar.expanded .sidebar-saves { opacity: 1; }
 .saves-title { font-size: 12px; font-weight: 700; color: #1A2340; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 6px; }
 .save-item { font-size: 12px; color: #9AA4B8; font-weight: 600; padding: 4px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.save-button {
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: none;
+  padding: 4px 0;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+.save-button:hover {
+  color: #4A7CF7;
+}
 
 /* Avatar row */
 .sidebar-avatar-row {
@@ -179,6 +192,22 @@ body { background: var(--gray-bg); margin: 0; overflow-x: hidden; }
 .search-bar input {
   border: none; outline: none; flex: 1;
   font-size: 14px; color: #1A2340; background: transparent;
+}
+.favorite-btn {
+  background: none; border: none;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; padding: 4px;
+  color: #9AA4B8; transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+.favorite-btn:hover {
+  color: #E74C3C;
+}
+.favorite-btn.favorited {
+  color: #E74C3C;
+}
+.favorite-btn.favorited svg {
+  fill: #E74C3C;
 }
 
 #map { border-radius: 16px; overflow: hidden; height: 500px; box-shadow: 0 4px 24px rgba(74,124,247,.08); }

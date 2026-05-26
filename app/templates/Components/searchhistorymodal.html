@@ -1,0 +1,407 @@
+<!-- Search/Chat History Modal -->
+<div class="modal fade" id="searchHistoryModal" tabindex="-1" aria-labelledby="searchHistoryLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg">
+    <div class="modal-content history-modal">
+      <div class="modal-header history-modal-header">
+        <div>
+          <h5 class="modal-title" id="searchHistoryLabel">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="margin-right: 8px; vertical-align: middle;">
+              <circle cx="11" cy="11" r="8"/>
+              <path d="M21 21l-4.35-4.35"/>
+            </svg>
+            Search History
+          </h5>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body history-modal-body">
+        <!-- Search filters -->
+        <div class="history-filters">
+          <input type="text" id="historySearchInput" class="form-control history-search-input" placeholder="Search history...">
+          <div class="filter-tags">
+            <button class="filter-tag active" data-filter="all">All</button>
+            <button class="filter-tag" data-filter="today">Today</button>
+            <button class="filter-tag" data-filter="week">This Week</button>
+            <button class="filter-tag" data-filter="month">This Month</button>
+          </div>
+        </div>
+
+        <!-- History list -->
+        <div id="historyList" class="history-list">
+          <!-- History items will be dynamically populated -->
+        </div>
+
+        <!-- Empty state -->
+        <div id="emptyHistoryState" class="empty-state" style="display: none;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="#9AA4B8" stroke-width="1.5">
+            <circle cx="11" cy="11" r="8"/>
+            <path d="M21 21l-4.35-4.35"/>
+          </svg>
+          <p>No search history yet</p>
+          <small>Your searches will appear here</small>
+        </div>
+      </div>
+      <div class="modal-footer history-modal-footer">
+        <button type="button" class="btn btn-sm btn-outline-danger" id="clearHistoryBtn">Clear All</button>
+        <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .history-modal {
+    border: 1px solid #E8ECF2;
+    border-radius: 16px;
+    box-shadow: 0 12px 48px rgba(0, 0, 0, 0.15);
+  }
+
+  .history-modal-header {
+    border-bottom: 1px solid #E8ECF2;
+    padding: 20px;
+    background: #fff;
+  }
+
+  .history-modal-header h5 {
+    margin: 0;
+    color: #1A2340;
+    font-weight: 700;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+  }
+
+  .history-modal-body {
+    padding: 20px;
+    max-height: 500px;
+    overflow-y: auto;
+  }
+
+  .history-filters {
+    margin-bottom: 20px;
+  }
+
+  .history-search-input {
+    border: 1px solid #E8ECF2;
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 13px;
+    margin-bottom: 12px;
+    color: #1A2340;
+  }
+
+  .history-search-input:focus {
+    border-color: #4A7CF7;
+    box-shadow: 0 0 0 3px rgba(74, 124, 247, 0.1);
+    outline: none;
+  }
+
+  .filter-tags {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .filter-tag {
+    background: #F4F6FA;
+    border: 1px solid #E8ECF2;
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 12px;
+    color: #1A2340;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .filter-tag:hover {
+    border-color: #4A7CF7;
+    color: #4A7CF7;
+  }
+
+  .filter-tag.active {
+    background: #4A7CF7;
+    border-color: #4A7CF7;
+    color: #fff;
+  }
+
+  .history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .history-item {
+    background: #F4F6FA;
+    border: 1px solid #E8ECF2;
+    border-radius: 10px;
+    padding: 12px 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .history-item:hover {
+    background: #EEF2FF;
+    border-color: #4A7CF7;
+    box-shadow: 0 2px 8px rgba(74, 124, 247, 0.1);
+  }
+
+  .history-item-content {
+    flex: 1;
+  }
+
+  .history-item-address {
+    font-size: 13px;
+    color: #1A2340;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  .history-item-time {
+    font-size: 11px;
+    color: #9AA4B8;
+  }
+
+  .history-item-actions {
+    display: flex;
+    gap: 6px;
+  }
+
+  .history-item-btn {
+    background: none;
+    border: none;
+    padding: 4px 8px;
+    color: #4A7CF7;
+    cursor: pointer;
+    font-size: 11px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+  }
+
+  .history-item-btn:hover {
+    color: #1A2340;
+    background: rgba(74, 124, 247, 0.1);
+    border-radius: 4px;
+  }
+
+  .history-item-btn.favorite {
+    color: #9AA4B8;
+  }
+
+  .history-item-btn.favorite.favorited {
+    color: #FFB800;
+  }
+
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    text-align: center;
+  }
+
+  .empty-state svg {
+    margin-bottom: 16px;
+    opacity: 0.5;
+  }
+
+  .empty-state p {
+    font-size: 14px;
+    color: #1A2340;
+    font-weight: 600;
+    margin: 0 0 4px 0;
+  }
+
+  .empty-state small {
+    font-size: 12px;
+    color: #9AA4B8;
+  }
+
+  .history-modal-footer {
+    border-top: 1px solid #E8ECF2;
+    padding: 14px 20px;
+    background: #F4F6FA;
+  }
+
+  .btn-outline-danger {
+    border: 1px solid #E8ECF2;
+    color: #E74C3C;
+    background: #fff;
+  }
+
+  .btn-outline-danger:hover {
+    background: #E74C3C;
+    color: #fff;
+    border-color: #E74C3C;
+  }
+</style>
+
+<script>
+  // Mock history data - replace with actual backend calls
+  const mockHistoryData = [
+    { id: 1, address: '123 Altura Ext. 456 Sta. Mesa, Manila', timestamp: new Date(Date.now() - 5 * 60 * 1000), favorited: false },
+    { id: 2, address: '456 Ortigas Avenue, Pasig City', timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000), favorited: true },
+    { id: 3, address: '789 BGC, Taguig City', timestamp: new Date(Date.now() - 24 * 60 * 60 * 1000), favorited: false },
+    { id: 4, address: '321 Malate, Manila', timestamp: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), favorited: false },
+    { id: 5, address: '654 Makati CBD, Makati City', timestamp: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), favorited: true },
+  ];
+
+  let historyData = [...mockHistoryData];
+  let currentFilter = 'all';
+  let searchQuery = '';
+
+  function initSearchHistory() {
+    const historyModal = document.getElementById('searchHistoryModal');
+    if (historyModal) {
+      renderHistory();
+      setupEventListeners();
+    }
+  }
+
+  function setupEventListeners() {
+    // Search input
+    const searchInput = document.getElementById('historySearchInput');
+    if (searchInput) {
+      searchInput.addEventListener('input', (e) => {
+        searchQuery = e.target.value.toLowerCase();
+        renderHistory();
+      });
+    }
+
+    // Filter tags
+    const filterTags = document.querySelectorAll('.filter-tag');
+    filterTags.forEach(tag => {
+      tag.addEventListener('click', () => {
+        filterTags.forEach(t => t.classList.remove('active'));
+        tag.classList.add('active');
+        currentFilter = tag.dataset.filter;
+        renderHistory();
+      });
+    });
+
+    // Clear history button
+    const clearBtn = document.getElementById('clearHistoryBtn');
+    if (clearBtn) {
+      clearBtn.addEventListener('click', clearHistory);
+    }
+  }
+
+  function getFilteredHistory() {
+    let filtered = historyData;
+
+    // Apply time filter
+    if (currentFilter !== 'all') {
+      const now = new Date();
+      filtered = filtered.filter(item => {
+        const daysDiff = (now - item.timestamp) / (1000 * 60 * 60 * 24);
+        if (currentFilter === 'today') return daysDiff < 1;
+        if (currentFilter === 'week') return daysDiff < 7;
+        if (currentFilter === 'month') return daysDiff < 30;
+        return true;
+      });
+    }
+
+    // Apply search query
+    if (searchQuery) {
+      filtered = filtered.filter(item =>
+        item.address.toLowerCase().includes(searchQuery)
+      );
+    }
+
+    return filtered;
+  }
+
+  function formatTime(date) {
+    const now = new Date();
+    const diffMs = now - date;
+    const diffMins = Math.floor(diffMs / (1000 * 60));
+    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+    if (diffMins < 1) return 'Just now';
+    if (diffMins < 60) return `${diffMins}m ago`;
+    if (diffHours < 24) return `${diffHours}h ago`;
+    if (diffDays < 7) return `${diffDays}d ago`;
+    return date.toLocaleDateString();
+  }
+
+  function renderHistory() {
+    const historyList = document.getElementById('historyList');
+    const emptyState = document.getElementById('emptyHistoryState');
+    const filtered = getFilteredHistory();
+
+    if (filtered.length === 0) {
+      historyList.style.display = 'none';
+      emptyState.style.display = 'flex';
+      return;
+    }
+
+    historyList.style.display = 'flex';
+    emptyState.style.display = 'none';
+
+    historyList.innerHTML = filtered.map(item => `
+      <div class="history-item">
+        <div class="history-item-content">
+          <div class="history-item-address">${item.address}</div>
+          <div class="history-item-time">${formatTime(item.timestamp)}</div>
+        </div>
+        <div class="history-item-actions">
+          <button class="history-item-btn favorite ${item.favorited ? 'favorited' : ''}" onclick="toggleFavorite(${item.id})">
+            ${item.favorited ? '★' : '☆'}
+          </button>
+          <button class="history-item-btn" onclick="loadHistory(${item.id})">Load</button>
+          <button class="history-item-btn" onclick="deleteHistory(${item.id})">Delete</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function toggleFavorite(id) {
+    const item = historyData.find(h => h.id === id);
+    if (item) {
+      item.favorited = !item.favorited;
+      renderHistory();
+    }
+  }
+
+  function loadHistory(id) {
+    const item = historyData.find(h => h.id === id);
+    if (item) {
+      // Load this address in the search bar
+      const addressInput = document.getElementById('addressInput');
+      if (addressInput) {
+        addressInput.value = item.address;
+        // Trigger search if performSearch is available
+        if (typeof performSearch === 'function') {
+          performSearch();
+        } else if (typeof window.performSearch === 'function') {
+          window.performSearch();
+        }
+      }
+      // Close modal
+      setTimeout(() => {
+        const modal = bootstrap.Modal.getInstance(document.getElementById('searchHistoryModal'));
+        if (modal) modal.hide();
+      }, 100);
+    }
+  }
+
+  function deleteHistory(id) {
+    historyData = historyData.filter(h => h.id !== id);
+    renderHistory();
+  }
+
+  function clearHistory() {
+    if (confirm('Are you sure you want to clear all search history? This cannot be undone.')) {
+      historyData = [];
+      renderHistory();
+    }
+  }
+
+  // Initialize when modal is shown
+  document.addEventListener('DOMContentLoaded', initSearchHistory);
+</script>

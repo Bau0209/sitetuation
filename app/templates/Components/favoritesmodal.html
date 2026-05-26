@@ -1,0 +1,421 @@
+<!-- Favorites Modal -->
+<div class="modal fade" id="favoritesModal" tabindex="-1" aria-labelledby="favoritesLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg">
+    <div class="modal-content favorites-modal">
+      <div class="modal-header favorites-modal-header">
+        <div>
+          <h5 class="modal-title" id="favoritesLabel">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="margin-right: 8px; vertical-align: middle;">
+              <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/>
+            </svg>
+            Favorite Locations
+          </h5>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body favorites-modal-body">
+        <!-- Sort/Filter options -->
+        <div class="favorites-controls">
+          <div class="favorites-search">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#9AA4B8" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/>
+              <path d="M21 21l-4.35-4.35"/>
+            </svg>
+            <input type="text" id="favoritesSearchInput" class="form-control favorites-search-input" placeholder="Search favorites...">
+          </div>
+          <div class="sort-select">
+            <select id="favoritesSortSelect" class="styled-select-small">
+              <option value="recent">Most Recent</option>
+              <option value="oldest">Oldest First</option>
+              <option value="alpha">Alphabetical</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Favorites list -->
+        <div id="favoritesList" class="favorites-list">
+          <!-- Favorite items will be dynamically populated -->
+        </div>
+
+        <!-- Empty state -->
+        <div id="emptyFavoritesState" class="empty-state" style="display: none;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="#9AA4B8" stroke-width="1.5">
+            <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/>
+          </svg>
+          <p>No favorite locations yet</p>
+          <small>Mark locations as favorites to save them here</small>
+        </div>
+      </div>
+      <div class="modal-footer favorites-modal-footer">
+        <button type="button" class="btn btn-sm btn-outline-danger" id="clearFavoritesBtn">Clear All Favorites</button>
+        <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .favorites-modal {
+    border: 1px solid #E8ECF2;
+    border-radius: 16px;
+    box-shadow: 0 12px 48px rgba(0, 0, 0, 0.15);
+  }
+
+  .favorites-modal-header {
+    border-bottom: 1px solid #E8ECF2;
+    padding: 20px;
+    background: #fff;
+  }
+
+  .favorites-modal-header h5 {
+    margin: 0;
+    color: #1A2340;
+    font-weight: 700;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+  }
+
+  .favorites-modal-body {
+    padding: 20px;
+    max-height: 500px;
+    overflow-y: auto;
+  }
+
+  .favorites-controls {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+    align-items: center;
+  }
+
+  .favorites-search {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    background: #F4F6FA;
+    border: 1px solid #E8ECF2;
+    border-radius: 10px;
+    padding: 0 12px;
+    gap: 8px;
+  }
+
+  .favorites-search-input {
+    border: none;
+    background: transparent;
+    padding: 10px 0;
+    font-size: 13px;
+    color: #1A2340;
+    width: 100%;
+  }
+
+  .favorites-search-input:focus {
+    outline: none;
+    box-shadow: none;
+  }
+
+  .favorites-search-input::placeholder {
+    color: #9AA4B8;
+  }
+
+  .sort-select {
+    min-width: 120px;
+  }
+
+  .styled-select-small {
+    border: 1px solid #E8ECF2;
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-size: 12px;
+    color: #1A2340;
+    font-weight: 600;
+    background: #fff;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .styled-select-small:hover {
+    border-color: #4A7CF7;
+  }
+
+  .styled-select-small:focus {
+    outline: none;
+    border-color: #4A7CF7;
+    box-shadow: 0 0 0 3px rgba(74, 124, 247, 0.1);
+  }
+
+  .favorites-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .favorite-item {
+    background: #F4F6FA;
+    border: 1px solid #E8ECF2;
+    border-radius: 10px;
+    padding: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .favorite-item:hover {
+    background: #EEF2FF;
+    border-color: #4A7CF7;
+    box-shadow: 0 2px 8px rgba(74, 124, 247, 0.1);
+  }
+
+  .favorite-item-content {
+    flex: 1;
+  }
+
+  .favorite-item-address {
+    font-size: 13px;
+    color: #1A2340;
+    font-weight: 600;
+    margin-bottom: 4px;
+    word-break: break-word;
+  }
+
+  .favorite-item-meta {
+    display: flex;
+    gap: 16px;
+    font-size: 11px;
+    color: #9AA4B8;
+  }
+
+  .favorite-item-actions {
+    display: flex;
+    gap: 6px;
+  }
+
+  .favorite-item-btn {
+    background: none;
+    border: none;
+    padding: 6px 10px;
+    color: #4A7CF7;
+    cursor: pointer;
+    font-size: 11px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+  }
+
+  .favorite-item-btn:hover {
+    color: #1A2340;
+    background: rgba(74, 124, 247, 0.1);
+    border-radius: 4px;
+  }
+
+  .favorite-item-btn.remove {
+    color: #E74C3C;
+  }
+
+  .favorite-item-btn.remove:hover {
+    background: rgba(231, 76, 60, 0.1);
+    color: #E74C3C;
+  }
+
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    text-align: center;
+  }
+
+  .empty-state svg {
+    margin-bottom: 16px;
+    opacity: 0.5;
+  }
+
+  .empty-state p {
+    font-size: 14px;
+    color: #1A2340;
+    font-weight: 600;
+    margin: 0 0 4px 0;
+  }
+
+  .empty-state small {
+    font-size: 12px;
+    color: #9AA4B8;
+  }
+
+  .favorites-modal-footer {
+    border-top: 1px solid #E8ECF2;
+    padding: 14px 20px;
+    background: #F4F6FA;
+  }
+
+  .btn-outline-danger {
+    border: 1px solid #E8ECF2;
+    color: #E74C3C;
+    background: #fff;
+  }
+
+  .btn-outline-danger:hover {
+    background: #E74C3C;
+    color: #fff;
+    border-color: #E74C3C;
+  }
+</style>
+
+<script>
+  let favoritesData = [];
+  let favoritesSearchQuery = '';
+  let favoritesSortBy = 'recent';
+
+  function initFavorites() {
+    const favoritesModal = document.getElementById('favoritesModal');
+    if (favoritesModal) {
+      setupFavoritesEventListeners();
+      // Sync with history data when modal opens
+      favoritesModal.addEventListener('show.bs.modal', syncFavoritesFromHistory);
+    }
+  }
+
+  function setupFavoritesEventListeners() {
+    // Search input
+    const searchInput = document.getElementById('favoritesSearchInput');
+    if (searchInput) {
+      searchInput.addEventListener('input', (e) => {
+        favoritesSearchQuery = e.target.value.toLowerCase();
+        renderFavorites();
+      });
+    }
+
+    // Sort select
+    const sortSelect = document.getElementById('favoritesSortSelect');
+    if (sortSelect) {
+      sortSelect.addEventListener('change', (e) => {
+        favoritesSortBy = e.target.value;
+        renderFavorites();
+      });
+    }
+
+    // Clear all favorites
+    const clearBtn = document.getElementById('clearFavoritesBtn');
+    if (clearBtn) {
+      clearBtn.addEventListener('click', clearAllFavorites);
+    }
+  }
+
+  function syncFavoritesFromHistory() {
+    // Get favorited items from history data
+    if (window.historyData && Array.isArray(window.historyData)) {
+      favoritesData = window.historyData.filter(item => item.favorited === true);
+    }
+    renderFavorites();
+  }
+
+  function getSortedFavorites() {
+    let sorted = [...favoritesData];
+
+    // Apply search query
+    if (favoritesSearchQuery) {
+      sorted = sorted.filter(item =>
+        item.address.toLowerCase().includes(favoritesSearchQuery)
+      );
+    }
+
+    // Apply sorting
+    if (favoritesSortBy === 'recent') {
+      sorted.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+    } else if (favoritesSortBy === 'oldest') {
+      sorted.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+    } else if (favoritesSortBy === 'alpha') {
+      sorted.sort((a, b) => a.address.localeCompare(b.address));
+    }
+
+    return sorted;
+  }
+
+  function formatFavoriteTime(date) {
+    const options = { month: 'short', day: 'numeric', year: 'numeric' };
+    return new Date(date).toLocaleDateString('en-US', options);
+  }
+
+  function renderFavorites() {
+    const favoritesList = document.getElementById('favoritesList');
+    const emptyState = document.getElementById('emptyFavoritesState');
+    const sorted = getSortedFavorites();
+
+    if (sorted.length === 0) {
+      favoritesList.style.display = 'none';
+      emptyState.style.display = 'flex';
+      return;
+    }
+
+    favoritesList.style.display = 'flex';
+    emptyState.style.display = 'none';
+
+    favoritesList.innerHTML = sorted.map(item => `
+      <div class="favorite-item">
+        <div class="favorite-item-content">
+          <div class="favorite-item-address">${item.address}</div>
+          <div class="favorite-item-meta">
+            <span>Added: ${formatFavoriteTime(item.timestamp)}</span>
+          </div>
+        </div>
+        <div class="favorite-item-actions">
+          <button class="favorite-item-btn" onclick="loadFavorite(${item.id})">Load</button>
+          <button class="favorite-item-btn remove" onclick="removeFavorite(${item.id})">Remove</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function loadFavorite(id) {
+    const item = favoritesData.find(f => f.id === id);
+    if (item) {
+      // Load this address in the search bar
+      const addressInput = document.getElementById('addressInput');
+      if (addressInput) {
+        addressInput.value = item.address;
+        // Trigger search if performSearch is available
+        if (typeof performSearch === 'function') {
+          performSearch();
+        } else if (typeof window.performSearch === 'function') {
+          window.performSearch();
+        }
+      }
+      // Close modal
+      setTimeout(() => {
+        const modal = bootstrap.Modal.getInstance(document.getElementById('favoritesModal'));
+        if (modal) modal.hide();
+      }, 100);
+    }
+  }
+
+  function removeFavorite(id) {
+    // Find and unfavorite in history data
+    if (window.historyData) {
+      const item = window.historyData.find(h => h.id === id);
+      if (item) {
+        item.favorited = false;
+      }
+    }
+    // Also remove from local favorites
+    favoritesData = favoritesData.filter(f => f.id !== id);
+    renderFavorites();
+  }
+
+  function clearAllFavorites() {
+    if (confirm('Are you sure you want to remove all favorite locations? This cannot be undone.')) {
+      // Unfavorite all in history data
+      if (window.historyData) {
+        window.historyData.forEach(item => item.favorited = false);
+      }
+      // Clear local favorites
+      favoritesData = [];
+      renderFavorites();
+    }
+  }
+
+  // Initialize when document is ready
+  document.addEventListener('DOMContentLoaded', initFavorites);
+</script>
