@@ -44,12 +44,41 @@ body { background: var(--gray-bg); margin: 0; overflow-x: hidden; }
 }
 .sidebar-toggle:hover { background: var(--blue-light); color: var(--blue); }
 
-.sidebar-icon {
-  width: 36px; height: 36px;
-  display: flex; align-items: center; justify-content: center;
-  border-radius: 10px; cursor: pointer;
-  color: #9AA4B8; transition: all .2s;
-  flex-shrink: 0;
+/* Sidebar brand container */
+.sidebar-brand {
+  display: flex; align-items: center;
+  padding: 0 10px; width: 100%;
+  overflow: hidden; min-height: 36px;
+}
+
+/* Collapsed: show only the icon */
+.sidebar-logo-icon-img {
+  width: 32px; height: 32px;
+  object-fit: contain; flex-shrink: 0;
+  display: block;
+  transition: opacity .2s;
+}
+.sidebar-logo-full-img {
+  height: 28px; width: auto;
+  object-fit: contain; flex-shrink: 0;
+  display: none; opacity: 0;
+  transition: opacity .25s .05s;
+  white-space: nowrap;
+}
+
+/* Expanded: hide icon, show full logo */
+.sidebar.expanded .sidebar-logo-icon-img {
+  display: none;
+}
+.sidebar.expanded .sidebar-logo-full-img {
+  display: block;
+  opacity: 1;
+}
+
+/* Topbar logo */
+.topbar-logo-img {
+  height: 30px; width: auto;
+  object-fit: contain;
 }
 .sidebar-icon:hover, .sidebar-icon.active { background: var(--blue-light); color: var(--blue); }
 

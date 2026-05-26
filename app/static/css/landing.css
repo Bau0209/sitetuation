@@ -35,9 +35,12 @@ nav {
 }
 nav.scrolled { background: rgba(234,243,252,0.97); box-shadow: 0 2px 12px rgba(74,124,247,.08); }
 
-.nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-.nav-logo-text { font-weight: 800; font-size: 20px; color: var(--navy); letter-spacing: -.3px; }
-.nav-logo-text span { color: var(--blue); }
+/* Nav logo image */
+.nav-logo-img {
+  height: 35px;
+  width: auto;
+  object-fit: contain;
+}
 
 .nav-links { display: flex; align-items: center; gap: 32px; list-style: none; }
 .nav-links a { font-size: 14px; font-weight: 600; color: #4A5568; text-decoration: none; transition: color .2s; }
