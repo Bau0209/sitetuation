@@ -28,15 +28,20 @@
   </ul>
 
   <div class="nav-right">
-    <!--
-      In Flask, change href to: href="{{ url_for('main.landingpage') }}"
-      or your login route as needed.
-    -->
-    <a href="{{ url_for('main.landingpage') }}" class="btn-nav-login">Log In</a>
-    <a href="{{ url_for('main.plans') }}" class="btn-nav-cta">
-      Get Started
-      <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </a>
+    {% if username %}
+      <span class="nav-user">Hi, {{ username }}</span>
+      <a href="{{ url_for('main.plans') }}" class="btn-nav-cta">
+        Dashboard
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href="{{ url_for('main.logout') }}" class="btn-nav-login">Logout</a>
+    {% else %}
+      <a href="{{ url_for('main.login') }}" class="btn-nav-login">Log In</a>
+      <a href="{{ url_for('main.register') }}" class="btn-nav-cta">
+        Get Started
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    {% endif %}
   </div>
 </nav>
 
@@ -62,7 +67,7 @@
         <!--
           In Flask: href="{{ url_for('main.landingpage') }}"
         -->
-        <a  href="{{ url_for('main.plans') }}" class="btn-hero-primary">
+        <a  href="{{ url_for('main.login') }}" class="btn-hero-primary">
           Get Started Free
           <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
@@ -400,10 +405,7 @@
 
     <div style="margin-top:40px;" class="reveal">
       <p style="color:#6B7280;font-size:13px;margin-bottom:16px;">Or jump straight in →</p>
-      <!--
-        In Flask: href="{{ url_for('main.landingpage') }}"
-      -->
-      <a href="main.html" class="btn-hero-primary" style="display:inline-flex;margin:0 auto;">
+      <a href="{{ url_for('main.plans') }}" class="btn-hero-primary" style="display:inline-flex;margin:0 auto;">
         Open SiteTuation Dashboard
         <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </a>
@@ -419,7 +421,7 @@
     <li><a href="#features">Features</a></li>
     <li><a href="#about">About</a></li>
     <li><a href="#pricing">Pricing</a></li>
-    <li><a href="main.html">Dashboard</a></li>
+    <li><a href="{{ url_for('main.plans') }}">Dashboard</a></li>
   </ul>
   <p class="footer-copy">© 2025 SiteTuation · Turning Locations into Smart Decisions · Bautista · Geolligue · Modesto · Toyor</p>
 </footer>

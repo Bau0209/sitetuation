@@ -47,12 +47,45 @@ nav.scrolled { background: rgba(234,243,252,0.97); box-shadow: 0 2px 12px rgba(7
 .nav-links a:hover { color: var(--blue); }
 
 .nav-right { display: flex; align-items: center; gap: 12px; }
+.nav-user { font-size: 14px; font-weight: 700; color: var(--navy); }
 .btn-nav-login {
   background: transparent; border: 1.5px solid var(--border);
   border-radius: 10px; padding: 8px 18px;
   font-size: 14px; font-weight: 600; color: var(--navy);
   text-decoration: none; transition: all .2s; cursor: pointer;
 }
+.btn-nav-login:hover { border-color: var(--blue); color: var(--blue); }
+.btn-nav-cta {
+  background: var(--blue); color: #fff;
+  border: none; border-radius: 10px;
+  padding: 9px 20px; font-size: 14px; font-weight: 700;
+  text-decoration: none; cursor: pointer; transition: all .2s;
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.btn-nav-cta:hover { background: #3563e9; color: #fff; transform: translateY(-1px); }
+
+.auth-page {
+  min-height: 100vh; display: flex; align-items: center; justify-content: center;
+  padding: 120px 24px; background: linear-gradient(145deg, #EAF3FC 0%, #C9E3F5 55%, #A8CFED 100%);
+}
+.auth-card {
+  width: 100%; max-width: 440px;
+  background: #fff; border-radius: 24px;
+  border: 1.5px solid var(--border);
+  box-shadow: 0 24px 64px rgba(74,124,247,.12);
+  padding: 36px; overflow: hidden;
+}
+.auth-card .section-label { margin-bottom: 12px; }
+.auth-card .section-title { margin-bottom: 12px; }
+.auth-card .section-sub { margin-bottom: 24px; }
+.auth-form { display: grid; gap: 16px; }
+.form-group label { display: block; font-size: 12px; font-weight: 700; color: #4A5568; margin-bottom: 8px; }
+.form-control { width: 100%; padding: 14px 16px; border-radius: 14px; border: 1px solid #D1D5DB; background: #F9FAFB; outline: none; font-size: 14px; }
+.form-control:focus { border-color: var(--blue); box-shadow: 0 0 0 4px rgba(74,124,247,.1); }
+.form-error { background: #FFE7E7; color: #BF1650; border-radius: 16px; padding: 12px 14px; font-size: 13px; margin-bottom: 10px; }
+.btn-auth { width: 100%; justify-content: center; }
+.auth-footer { margin-top: 20px; font-size: 13px; color: #4A5568; text-align: center; }
+.auth-footer a { color: var(--blue); font-weight: 700; text-decoration: none; }
 .btn-nav-login:hover { border-color: var(--blue); color: var(--blue); }
 .btn-nav-cta {
   background: var(--blue); color: #fff;

@@ -193,6 +193,17 @@ body { background: var(--gray-bg); margin: 0; overflow-x: hidden; }
   border-radius: 20px; padding: 6px 14px;
   font-weight: 700; font-size: 14px;
 }
+.topbar-user {
+  font-size: 14px; font-weight: 700;
+  background: #F4F6FA; color: #1A2340;
+  border-radius: 14px; padding: 10px 16px;
+}
+.btn-logout {
+  background: #F4F6FA; color: #1A2340;
+}
+.btn-logout:hover {
+  background: #E8ECF2;
+}
 .btn-upgrade {
   background: var(--blue); color: #fff;
   border: none; border-radius: 10px;
@@ -314,4 +325,87 @@ body { background: var(--gray-bg); margin: 0; overflow-x: hidden; }
 }
 .landing-greeting {
   margin-top: 8px;
+}
+
+/* User Profile Modal Styling */
+/* The modal is rendered inside the sidebar; position will be set via JS to keep it
+   contained within the left panel. Keep base rules minimal so JS can set coordinates. */
+#userProfileModal .modal-dialog {
+  display: block;
+  position: absolute;
+  left: 8px;
+  top: 8px;
+  margin: 0;
+}
+
+#userProfileModal .modal-content {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  width: auto;
+  min-width: 200px;
+  background: #dfe7f1;
+}
+
+#userProfileModal .modal-body {
+  padding: 16px;
+  background: #bdd5f7;
+  border-radius: 12px;
+}
+
+.user-profile-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.user-profile-avatar {
+  width: 32px;
+  height: 32px;
+  background: #5B9FFF;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgb(77, 76, 76);
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.user-profile-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-profile-name {
+  color: rgb(7, 7, 7);
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.user-profile-plan {
+  color: #2c2c2c;
+  font-size: 12px;
+}
+
+.logout-btn {
+  width: 100%;
+  padding: 10px 12px;
+  background: none;
+  border: none;
+  color: #E74C3C;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s;
+}
+
+.logout-btn:hover {
+  background: rgba(231, 76, 60, 0.1);
+  border-radius: 6px;
 }

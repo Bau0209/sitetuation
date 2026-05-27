@@ -60,13 +60,34 @@
     </div>
   </div>
 
-  <div class="sidebar-avatar-row">
+  <div class="sidebar-avatar-row" onclick="openUserModal()" style="cursor: pointer;" title="Click to logout">
     <div class="sidebar-avatar">
       <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
     </div>
     <div class="avatar-info">
-      <div class="avatar-name">Username</div>
-      <div class="avatar-plan">Free</div>
+      <div class="avatar-name">{{ username or 'Guest' }}</div>
+      <div class="avatar-plan">{{ current_plan|capitalize }}</div>
+    </div>
+  </div>
+  <!-- User Profile Modal (moved inside sidebar so it appears within left panel) -->
+  <div class="modal fade" id="userProfileModal" tabindex="-1" role="dialog" aria-labelledby="userProfileModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document" style="display: block;">
+      <div class="modal-content" style="border: none; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); width: auto; min-width: 200px;">
+        <div class="modal-body p-3" style="background: #bcd5f7; border-radius: 12px;">
+          <div class="user-profile-header">
+            <div class="user-profile-avatar">{{ username[0]|upper }}</div>
+            <div class="user-profile-info">
+              <div class="user-profile-name">{{ username or 'Guest' }}</div>
+              <div class="user-profile-plan">{{ current_plan|capitalize }}</div>
+            </div>
+          </div>
+          <hr style="border: none; border-top: 1px solid rgba(0,0,0,0.08); margin: 8px 0 12px;">
+          <button onclick="logoutUser()" class="logout-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+            Log out
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -82,6 +103,7 @@
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
       <span id="creditDisplay">150</span>
     </div>
+    <span class="topbar-user">Hi, {{ username }}</span>
     <a href="/plans" class="btn-upgrade">Upgrade</a>
   </div>
 </div>
@@ -187,6 +209,9 @@
 </div>
 
 <div id="toast" style="position:fixed;bottom:30px;right:30px;background:#1A2340;color:#fff;padding:14px 22px;border-radius:12px;font-weight:700;font-size:14px;display:none;z-index:999;box-shadow:0 8px 32px rgba(0,0,0,.18);"></div>
+
+<!-- User Profile Modal -->
+<!-- (removed — modal is now rendered inside the sidebar to keep it within the left panel) -->
 
 <!-- Search History Modal Container -->
 <div id="modalContainer"></div>
@@ -361,6 +386,76 @@
   window.handleGenerate = handleGenerate;
   window.toggleSection = toggleSection;
   window.toggleSidebar = toggleSidebar;
+
+  // User modal functions
+  function openUserModal() {
+    const modalEl = document.getElementById('userProfileModal');
+    const avatarRow = document.querySelector('.sidebar-avatar-row');
+    if (!modalEl || !avatarRow) return;
+
+    // Show modal without backdrop so it behaves like a dropdown
+    const bsModal = new bootstrap.Modal(modalEl, { backdrop: false, keyboard: true });
+    bsModal.show();
+
+    // After it's rendered, position the dialog above the avatar/username
+    requestAnimationFrame(() => {
+      const dialog = modalEl.querySelector('.modal-dialog');
+      if (!dialog) return;
+
+      // Ensure absolute positioning and no transform so coordinates map to viewport
+      dialog.style.position = 'absolute';
+      dialog.style.transform = 'none';
+      dialog.style.right = 'auto';
+
+      const sidebar = document.getElementById('sidebar');
+      const gap = 8;
+
+      // Position relative to the sidebar element so the menu stays inside the left panel
+      const avatarTop = avatarRow.offsetTop;
+      const avatarHeight = avatarRow.offsetHeight;
+
+      // measure after render
+      const dialogHeight = dialog.getBoundingClientRect().height || dialog.offsetHeight;
+      let top = avatarTop - dialogHeight - gap;
+      if (top < 8) top = avatarTop + avatarHeight + gap;
+
+      dialog.style.left = '8px';
+      dialog.style.top = top + 'px';
+      dialog.style.zIndex = 1200;
+
+      // ensure dialog is contained within sidebar
+      dialog.style.maxWidth = (sidebar.clientWidth - 16) + 'px';
+
+      // Close the modal if user clicks outside the profile panel
+      if (modalEl._outsideClickHandler) {
+        document.removeEventListener('mousedown', modalEl._outsideClickHandler, true);
+      }
+      modalEl._outsideClickHandler = function outsideClick(e) {
+        const modalContent = modalEl.querySelector('.modal-content');
+        if (!modalContent.contains(e.target) && !avatarRow.contains(e.target)) {
+          bsModal.hide();
+        }
+      };
+      setTimeout(() => document.addEventListener('mousedown', modalEl._outsideClickHandler, true), 0);
+
+      modalEl.addEventListener('hidden.bs.modal', () => {
+        if (modalEl._outsideClickHandler) {
+          document.removeEventListener('mousedown', modalEl._outsideClickHandler, true);
+          modalEl._outsideClickHandler = null;
+        }
+      }, { once: true });
+    });
+
+    // store instance for potential later use
+    modalEl.bsInstance = bsModal;
+  }
+
+  function logoutUser() {
+    window.location.href = "{{ url_for('main.logout') }}";
+  }
+
+  window.openUserModal = openUserModal;
+  window.logoutUser = logoutUser;
 
   // new tab button behavior
   document.getElementById('newTabBtn').addEventListener('click', () => goToLandingPage());
