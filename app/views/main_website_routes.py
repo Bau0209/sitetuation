@@ -12,7 +12,11 @@ def get_username():
     return session.get('username')
 
 def get_plan():
-    return session.get('plan', 'free')
+    plan = session.get('plan')
+    if plan is None:
+        plan = 'free_trial' if session.get('username') else 'guest'
+        session['plan'] = plan
+    return plan
 
 @main.route('/')
 def landingpage():
@@ -21,8 +25,6 @@ def landingpage():
 @main.route('/main')
 def plans():
     username = get_username()
-    if not username:
-        return redirect(url_for('main.login'))
     return render_template('main.html', current_plan=get_plan(), username=username)
 
 @main.route('/plans')

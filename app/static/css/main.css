@@ -34,34 +34,70 @@ body { background: var(--gray-bg); margin: 0; overflow-x: hidden; }
   align-items: flex-start;
 }
 
+/* Header with logo and toggle aligned together */
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  width: 100%;
+  padding: 0;
+  transition: justify-content .3s cubic-bezier(.4,0,.2,1);
+}
+.sidebar.expanded .sidebar-header {
+  justify-content: space-between;
+  padding: 0 10px;
+  width: calc(100% - 20px);
+}
+
 .sidebar-toggle {
-  width: 36px; height: 36px;
-  display: flex; align-items: center; justify-content: center;
-  border-radius: 10px; cursor: pointer;
-  color: #9AA4B8; transition: all .2s;
+  width: 36px;
+  height: 36px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  cursor: pointer;
+  color: #9AA4B8;
+  transition: all .2s;
   flex-shrink: 0;
-  margin-left: 10px;
+}
+.sidebar.expanded .sidebar-toggle {
+  display: flex;
 }
 .sidebar-toggle:hover { background: var(--blue-light); color: var(--blue); }
 
 /* Sidebar brand container */
 .sidebar-brand {
-  display: flex; align-items: center;
-  padding: 0 10px; width: 100%;
-  overflow: hidden; min-height: 36px;
+  display: flex;
+  align-items: center;
+  padding: 0;
+  overflow: hidden;
+  min-height: 36px;
+  flex: 1;
 }
 
-/* Collapsed: show only the icon */
+/* Collapsed: show only the icon - larger display */
 .sidebar-logo-icon-img {
-  width: 32px; height: 32px;
-  object-fit: contain; flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  flex-shrink: 0;
   display: block;
   transition: opacity .2s;
+  cursor: pointer;
 }
+.sidebar-logo-icon-img:hover {
+  opacity: 0.8;
+}
+
 .sidebar-logo-full-img {
-  height: 28px; width: auto;
-  object-fit: contain; flex-shrink: 0;
-  display: none; opacity: 0;
+  height: 28px;
+  width: auto;
+  object-fit: contain;
+  flex-shrink: 0;
+  display: none;
+  opacity: 0;
   transition: opacity .25s .05s;
   white-space: nowrap;
 }
@@ -69,7 +105,10 @@ body { background: var(--gray-bg); margin: 0; overflow-x: hidden; }
 /* Expanded: hide icon, show full logo */
 .sidebar.expanded .sidebar-logo-icon-img {
   display: none;
+  width: 32px;
+  height: 32px;
 }
+
 .sidebar.expanded .sidebar-logo-full-img {
   display: block;
   opacity: 1;
@@ -80,6 +119,7 @@ body { background: var(--gray-bg); margin: 0; overflow-x: hidden; }
   height: 30px; width: auto;
   object-fit: contain;
 }
+
 .sidebar-icon:hover, .sidebar-icon.active { background: var(--blue-light); color: var(--blue); }
 
 .sidebar-nav-row {
@@ -100,20 +140,6 @@ body { background: var(--gray-bg); margin: 0; overflow-x: hidden; }
 .sidebar.expanded .sidebar-nav-row .nav-label { opacity: 1; }
 .sidebar.expanded .sidebar-icon { color: #9AA4B8; }
 .sidebar.expanded .sidebar-nav-row:hover .sidebar-icon { color: var(--blue); }
-
-/* Logo area in sidebar */
-.sidebar-brand {
-  display: flex; align-items: center; gap: 10px;
-  padding: 0 10px; width: 100%;
-  overflow: hidden;
-}
-.sidebar-logo-icon { width: 32px; height: 32px; flex-shrink: 0; }
-.sidebar-logo-text {
-  font-weight: 800; font-size: 18px; color: #1A2340;
-  white-space: nowrap; opacity: 0;
-  transition: opacity .2s;
-}
-.sidebar.expanded .sidebar-logo-text { opacity: 1; }
 
 /* Expanded panel image */
 .sidebar-panel-img {
