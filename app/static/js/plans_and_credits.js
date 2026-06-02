@@ -26,13 +26,17 @@ function refreshPlanButtons() {
     if (p === currentPlan) {
       btn.textContent = 'Current Plan';
       btn.className = 'plan-btn current';
-      btn.onclick = null;
+      btn.onclick = () => navigateToMain();
     } else {
       btn.textContent = (p === 'free' ? 'Downgrade to ' : 'Upgrade to ') + labels[p];
       btn.className = 'plan-btn white-btn';
       btn.onclick = () => selectPlan(p);
     }
   });
+}
+
+function navigateToMain() {
+  window.location.href = '/main';
 }
 
 function selectPlan(plan) {
