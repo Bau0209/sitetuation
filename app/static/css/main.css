@@ -195,6 +195,30 @@ body { background: var(--gray-bg); margin: 0; overflow-x: hidden; }
 .avatar-name { font-size: 13px; font-weight: 700; color: #1A2340; }
 .avatar-plan { font-size: 11px; color: #9AA4B8; font-weight: 600; }
 
+/* Guest avatar visibility states */
+.guest-avatar-collapsed {
+  display: flex !important;
+  padding: 0 !important;
+  justify-content: center;
+}
+
+.guest-avatar-collapsed a:hover {
+  opacity: 0.9;
+  box-shadow: 0 2px 8px rgba(74, 124, 247, 0.3);
+}
+
+.sidebar.expanded .guest-avatar-collapsed {
+  display: none !important;
+}
+
+.guest-avatar-expanded {
+  display: none !important;
+}
+
+.sidebar.expanded .guest-avatar-expanded {
+  display: flex !important;
+}
+
 /* ── Topbar ─────────────────────────────────────────────────── */
 .topbar {
   margin-left: var(--sidebar-collapsed);
