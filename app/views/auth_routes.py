@@ -4,15 +4,23 @@ from app.models import Account
 
 auth = Blueprint('auth', __name__)
 
+def get_current_user():
+    username = session.get('username')
+    if not username:
+        return None
+    return Account.query.filter_by(username=username).first()
+
 def get_username():
-    return session.get('username')
+    user = get_current_user()
+    return user.username if user else None
 
 def get_plan():
-    plan = session.get('plan')
-    if plan is None:
-        plan = 'free_trial' if session.get('username') else 'guest'
-        session['plan'] = plan
-    return plan
+    user = get_current_user()
+
+    if not user:
+        return 'free'
+
+    return user.plan or 'free'
 
 # LOGIN
 @auth.route('/login', methods=['GET', 'POST'])
