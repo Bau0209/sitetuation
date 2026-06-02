@@ -36,10 +36,34 @@ function refreshPlanButtons() {
 }
 
 function selectPlan(plan) {
+  const prices = { plus: '600 PHP', pro: '1,000 PHP' };
+  const label = plan.charAt(0).toUpperCase() + plan.slice(1);
+  
+  document.getElementById('modalPlanName').textContent = label;
+  document.getElementById('modalPlanPrice').textContent = prices[plan];
+  document.getElementById('paymentModal').dataset.selectedPlan = plan;
+  document.getElementById('paymentModal').style.display = 'flex';
+}
+
+function closePaymentModal() {
+  document.getElementById('paymentModal').style.display = 'none';
+}
+
+function confirmPayment() {
+  const plan = document.getElementById('paymentModal').dataset.selectedPlan;
+  const method = document.querySelector('input[name="paymentMethod"]:checked').value;
+  const methodLabels = {
+    'credit-card': 'Credit Card',
+    'mobile-wallet': 'Mobile Wallet',
+    'bank-transfer': 'Bank Transfer'
+  };
+  
   currentPlan = plan;
   refreshPlanButtons();
+  closePaymentModal();
+  
   const label = plan.charAt(0).toUpperCase() + plan.slice(1);
-  showToast(`Successfully ${plan === 'free' ? 'downgraded to' : 'upgraded to'} ${label} Plan!`);
+  showToast(`Successfully upgraded to ${label} Plan via ${methodLabels[method]}!`);
 }
 
 function buyCredits(amount, price) {
