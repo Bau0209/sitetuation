@@ -31,6 +31,7 @@ def landingpage():
 
 @main.route('/main')
 def plans():
+    print(get_plan())
     return render_template(
         'main.html',
         current_plan=get_plan(),

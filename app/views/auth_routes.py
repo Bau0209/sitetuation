@@ -43,7 +43,7 @@ def login():
                 error = 'Invalid username or password.'
             else:
                 session['username'] = user.username
-                session.setdefault('plan', 'free')
+                session['plan'] = user.plan or 'free'
                 return redirect(url_for('main.plans'))
 
     return render_template(
@@ -81,7 +81,7 @@ def register():
                 db.session.commit()
 
                 session['username'] = username
-                session.setdefault('plan', 'free')
+                session['plan'] = new_user.plan or 'free'
                 return redirect(url_for('main.plans'))
 
     return render_template(

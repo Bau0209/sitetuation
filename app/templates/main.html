@@ -367,7 +367,8 @@
 
   <script>
     // ================== LANDING PAGE & PANEL LOGIC ===================
-    let currentPlan = 'free';
+    let currentPlan = "{{ current_plan }}";
+    const isFreePlan = () => currentPlan === 'free';
     let credits = 150;
     let generated = false;
     let isPanelVisible = false;   // tracks if right panel is shown (after first search)
@@ -397,7 +398,9 @@
 
       const ftw = document.getElementById('footTrafficWidget');
       if (cfg.hasAll) { ftw.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><span style="font-size:13px;font-weight:700;color:#1A2340;">High</span><span style="font-size:12px;color:#9AA4B8;">~3,200 / day</span></div><div class="traffic-bar"><div class="traffic-fill" style="width:78%"></div></div>`; }
-      else { ftw.innerHTML = `<div class="premium-field"><span style="font-size:12px;color:#9AA4B8;font-weight:600;">Upgrade to view</span><span class="premium-icon">💎</span></div>`; }
+      else {
+        ftw.innerHTML = `<div class="premium-field"><span style="font-size:12px;color:#9AA4B8;font-weight:600;">Upgrade to view</span>${isFreePlan() ? '<span class="premium-icon">💎</span>' : ''}</div>`;
+      }
 
       const nb = document.getElementById('nearbyWidget');
       if (generated) {
@@ -414,7 +417,7 @@
 
       const sw = document.getElementById('safetyWidget');
       if (cfg.hasSafety) sw.innerHTML = Object.entries(safetyData).map(([k, v]) => `<div class="stat-row"><span class="stat-label">${k}:</span><span class="stat-value">${v}</span></div>`).join('');
-      else sw.innerHTML = Object.keys(safetyData).map(k => `<div><div class="stat-label" style="margin-bottom:4px;">${k}:</div><div class="premium-field"><span style="font-size:12px;color:#9AA4B8;font-weight:600;">Upgrade to view</span><span class="premium-icon">💎</span></div></div>`).join('');
+      else sw.innerHTML = Object.keys(safetyData).map(k => `<div><div class="stat-label" style="margin-bottom:4px;">${k}:</div><div class="premium-field"><span style="font-size:12px;color:#9AA4B8;font-weight:600;">Upgrade to view</span>${isFreePlan() ? '<span class="premium-icon">💎</span>' : ''}</div></div>`).join('');
 
       const aw = document.getElementById('aiWidget');
       if (cfg.hasAI) aw.innerHTML = `<div class="stat-label" style="margin-bottom:6px;">Suggested Business Industry:</div><div style="background:#F4F6FA;border-radius:10px;padding:14px;font-size:13px;color:#1A2340;font-weight:600;line-height:1.6;">Based on foot traffic (3,200/day), university presence, and competitor landscape, we suggest: <strong>Fast Casual Dining</strong>, <strong>Study Cafes</strong>, or <strong>Convenience Stores</strong>.</div>`;
