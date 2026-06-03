@@ -125,6 +125,10 @@ function resetToLanding() {
 function performSearch() {
   const inputVal = document.getElementById('addressInput').value.trim();
   if (!inputVal) return;
+
+  addToSearchHistory(inputVal);
+  renderSidebarSaves();
+
   if (typeof google !== 'undefined' && google.maps && google.maps.Geocoder) {
     const geocoder = new google.maps.Geocoder();
     geocoder.geocode({ address: inputVal + ', Philippines' }, (res, status) => {
