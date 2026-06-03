@@ -21,6 +21,14 @@ def get_plan():
 
     return user.plan or 'free'
 
+def get_credits():
+    user = get_current_user()
+
+    if not user:
+        return
+    
+    return user.credits
+
 @main.route('/')
 def landingpage():
     return render_template(
@@ -35,7 +43,8 @@ def plans():
     return render_template(
         'main.html',
         current_plan=get_plan(),
-        username=get_username()
+        username=get_username(),
+        credits=get_credits()
     )
 
 @main.route('/plans')
@@ -43,5 +52,6 @@ def plans_and_credits():
     return render_template(
         'plans_and_credits.html',
         current_plan=get_plan(),
-        username=get_username()
+        username=get_username(),
+        credits=get_credits()
     )

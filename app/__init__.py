@@ -13,8 +13,9 @@ def create_app():
         db.create_all()
         
     # Registered Blueprints
-    from app.views import main, auth
+    from app.views import main, auth, credit_handler
     app.register_blueprint(main)
     app.register_blueprint(auth)
+    app.register_blueprint(credit_handler)
 
     return app

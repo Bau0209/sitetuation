@@ -368,7 +368,7 @@
     // ================== LANDING PAGE & PANEL LOGIC ===================
     let currentPlan = "{{ current_plan }}";
     const isFreePlan = () => currentPlan === 'free';
-    let credits = 150;
+    let credits = "{{ credits }}";
     let generated = false;
     let isPanelVisible = false;   // tracks if right panel is shown (after first search)
 
@@ -423,12 +423,29 @@
       else aw.innerHTML = `<div class="stat-label" style="margin-bottom:6px;">Suggested Business Industry:</div><div class="upgrade-gate"><p>Upgrade Plan for advanced features.</p><a href="/plans" class="btn-upgrade-small">Upgrade</a></div>`;
     }
 
-    function handleGenerate() {
-      if (credits < 50) { showToast('Insufficient credits!'); return; }
-      credits -= 50;
-      generated = true;
-      renderPanel();
-      showToast('Report generated! 50 credits used.');
+    // deduct 50 every generate
+    async function handleGenerate() {
+      try {
+        const response = await fetch('/deduct_credits', {
+          method: 'POST'
+        });
+
+        const data = await response.json();
+
+        if (!data.success) {
+          showToast(data.message);
+          return;
+        }
+
+        credits = data.credits;
+        generated = true;
+
+        renderPanel();
+        showToast('Report generated! 50 credits used.');
+      } catch (error) {
+        console.error(error);
+        showToast('Something went wrong.');
+      }
     }
 
     function toggleSection(sectionId, chevronId) {
@@ -450,6 +467,7 @@
         // Ensure first render after search
         generated = false;   // reset generated state for fresh location report
         renderPanel();       // load default free plan UI with info
+        handleGenerate()
       }
     }
 
