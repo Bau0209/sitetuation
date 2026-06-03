@@ -53,6 +53,8 @@ function closePaymentModal() {
   document.getElementById('paymentModal').style.display = 'none';
 }
 
+// Payment confirmation handler for the "Proceed with Payment" button.
+// This function is called from the payment modal in plans_and_credits.html.
 function confirmPayment() {
   const plan = document.getElementById('paymentModal').dataset.selectedPlan;
   const method = document.querySelector('input[name="paymentMethod"]:checked').value;
