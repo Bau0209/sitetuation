@@ -4,11 +4,6 @@ if (currentPlan.includes('{')) currentPlan = 'free';
 
 document.getElementById('tabPlans')?.addEventListener('click', () => switchTab('plans'));
 document.getElementById('tabCredits')?.addEventListener('click', () => switchTab('credits'));
-document.querySelectorAll('.btn-purchase').forEach(btn => {
-  const amount = Number(btn.dataset.amount);
-  const price = Number(btn.dataset.price);
-  btn.addEventListener('click', () => buyCredits(amount, price));
-});
 
 function switchTab(tab) {
   document.getElementById('tabPlans').classList.toggle('active', tab === 'plans');
@@ -43,10 +38,21 @@ function selectPlan(plan) {
   const prices = { plus: '600 PHP', pro: '1,000 PHP' };
   const label = plan.charAt(0).toUpperCase() + plan.slice(1);
   
-  document.getElementById('modalPlanName').textContent = label;
+  document.getElementById('modalPlanName').textContent = `${label} Plan`;
   document.getElementById('modalPlanPrice').textContent = prices[plan];
+  document.getElementById('paymentModal').dataset.selectedType = 'plan';
   document.getElementById('paymentModal').dataset.selectedPlan = plan;
   document.getElementById('paymentModal').style.display = 'flex';
+}
+
+function buyCredits(amount, price) {
+  document.getElementById('modalPlanName').textContent = `${amount} Credits`;
+  document.getElementById('modalPlanPrice').textContent = `${price} PHP`;
+  const modal = document.getElementById('paymentModal');
+  modal.dataset.selectedType = 'credits';
+  modal.dataset.selectedAmount = amount;
+  modal.dataset.selectedPrice = price;
+  modal.style.display = 'flex';
 }
 
 function closePaymentModal() {
@@ -56,24 +62,33 @@ function closePaymentModal() {
 // Payment confirmation handler for the "Proceed with Payment" button.
 // This function is called from the payment modal in plans_and_credits.html.
 function confirmPayment() {
-  const plan = document.getElementById('paymentModal').dataset.selectedPlan;
+  const modal = document.getElementById('paymentModal');
+  const selectedType = modal.dataset.selectedType;
   const method = document.querySelector('input[name="paymentMethod"]:checked').value;
   const methodLabels = {
     'credit-card': 'Credit Card',
     'mobile-wallet': 'Mobile Wallet',
     'bank-transfer': 'Bank Transfer'
   };
-  
-  currentPlan = plan;
-  refreshPlanButtons();
-  closePaymentModal();
-  
-  const label = plan.charAt(0).toUpperCase() + plan.slice(1);
-  showToast(`Successfully upgraded to ${label} Plan via ${methodLabels[method]}!`);
-}
 
-function buyCredits(amount, price) {
-  showToast(`Purchased ${amount} credits for ${price} php!`);
+  if (selectedType === 'plan') {
+    const plan = modal.dataset.selectedPlan;
+    currentPlan = plan;
+    refreshPlanButtons();
+    const label = plan.charAt(0).toUpperCase() + plan.slice(1);
+    showToast(`Successfully upgraded to ${label} Plan via ${methodLabels[method]}!`);
+  } else if (selectedType === 'credits') {
+    const amount = modal.dataset.selectedAmount;
+    const price = modal.dataset.selectedPrice;
+    showToast(`Purchased ${amount} credits for ${price} PHP via ${methodLabels[method]}!`);
+    closePaymentModal();
+    setTimeout(navigateToMain, 600);
+    return;
+  } else {
+    showToast('Payment completed successfully.');
+  }
+
+  closePaymentModal();
 }
 
 function showToast(msg) {
