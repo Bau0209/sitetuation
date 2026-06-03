@@ -1,246 +1,317 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <title>SiteTuation – Upgrade Your Plan</title>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/plans_and_credits.css') }}" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/plans_and_credits.css') }}" />
 </head>
-<body>
 
-<div class="py-5 px-3">
+<body data-initial-current-plan="{{ current_plan }}">
 
-  <!-- Header -->
-  <div class="text-center mb-5">
-    <h1 style="font-size:28px;font-weight:800;color:#1A2340;">Upgrade your plan</h1>
-  </div>
+  <div class=" py-5 px-3">
 
-  <!-- Tab toggle -->
-  <div class="d-flex justify-content-center mb-5">
-    <div class="tab-pill">
-      <button class="tab-btn active" id="tabPlans" onclick="switchTab('plans')">Plans</button>
-      <button class="tab-btn" id="tabCredits" onclick="switchTab('credits')">Credits</button>
+    <!-- Header -->
+    <div class="text-center mb-5">
+      <h1 style="font-size:28px;font-weight:800;color:#1A2340;">Upgrade your plan</h1>
     </div>
-  </div>
 
-  <!-- ── PLANS ───────────────────────────────────────────────────── -->
-  <div id="plansContent" class="container" style="max-width:900px;">
-    <div class="row g-4">
-
-      <!-- Free -->
-      <div class="col-12 col-md-4">
-        <div class="plan-card free">
-          <div class="plan-name" style="color:#6B7280;">Free</div>
-          <div class="plan-price" style="color:#1A2340;">0<span>php</span></div>
-          <div class="plan-credits-badge light">
-            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="none" viewBox="0 0 24 24" stroke="#4A7CF7" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-            No Monthly Credits (150 free)
-          </div>
-          <div class="feature-label" style="color:#6B7280;">SiteTuation Data:</div>
-          <div class="feature-item" style="color:#1A2340;">
-            <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="none" viewBox="0 0 24 24" stroke="#1CB98A" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
-            Population Size
-          </div>
-          <div class="feature-item" style="color:#1A2340;">
-            <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="none" viewBox="0 0 24 24" stroke="#1CB98A" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
-            3 Nearby Business
-          </div>
-          <div class="feature-label" style="color:#6B7280;margin-top:4px;">Account:</div>
-          <div class="feature-item" style="color:#1A2340;">
-            <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="none" viewBox="0 0 24 24" stroke="#1CB98A" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
-            1 save
-          </div>
-          <button class="plan-btn current" id="freePlanBtn">Current Plan</button>
-        </div>
+    <!-- Tab toggle -->
+    <div class="d-flex justify-content-center mb-5">
+      <div class="tab-pill">
+        <button class="tab-btn active" id="tabPlans" onclick="switchTab('plans')">Plans</button>
+        <button class="tab-btn" id="tabCredits" onclick="switchTab('credits')">Credits</button>
       </div>
-
-      <!-- Plus -->
-      <div class="col-12 col-md-4">
-        <div class="plan-card plus">
-          <div class="plan-name">Plus</div>
-          <div class="plan-price">600<span>php / month</span></div>
-          <div class="plan-credits-badge dark">
-            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-            650 Credits per month
-          </div>
-          <div class="feature-label">SiteTuation Data:</div>
-          <div class="feature-item">
-            <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
-            All data
-          </div>
-          <div class="feature-item">
-            <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
-            10 Nearby Businesses
-          </div>
-          <div class="feature-label" style="margin-top:4px;">Account:</div>
-          <div class="feature-item">
-            <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
-            5 saves
-          </div>
-          <button class="plan-btn white-btn" id="plusPlanBtn" onclick="selectPlan('plus')">Upgrade to Plus</button>
-        </div>
-      </div>
-
-      <!-- Pro -->
-      <div class="col-12 col-md-4">
-        <div class="plan-card pro">
-          <div class="plan-name">Pro</div>
-          <div class="plan-price">1,000<span>php</span></div>
-          <div class="plan-credits-badge dark">
-            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-            2,000 Credits per month
-          </div>
-          <div class="feature-label">SiteTuation Data:</div>
-          <div class="feature-item">
-            <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
-            All data
-          </div>
-          <div class="feature-item">
-            <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
-            Unlimited Uses
-          </div>
-          <div class="feature-label" style="margin-top:4px;">Account:</div>
-          <div class="feature-item">
-            <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
-            Unlimited saves
-          </div>
-          <button class="plan-btn white-btn" id="proPlanBtn" onclick="selectPlan('pro')">Upgrade to Pro</button>
-        </div>
-      </div>
-
     </div>
-  </div>
 
-  <!-- ── CREDITS ──────────────────────────────────────────────────── -->
-  <div id="creditsContent" class="container" style="max-width:900px;display:none;">
-    <div class="row g-4">
+    <!-- ── PLANS ───────────────────────────────────────────────────── -->
+    <div id="plansContent" class="container" style="max-width:900px;">
+      <div class="row g-4">
 
-      <!-- 100 credits -->
-      <div class="col-12 col-sm-6 col-md-3">
-        <div class="credit-card">
-          <div class="credit-top blue-bg">
-            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#4A7CF7" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-            100
-          </div>
-          <div class="credit-bottom blue-bottom">
-            <span class="credit-price">150 php</span>
-            <button class="btn-purchase" onclick="buyCredits(100, 150)">Purchase</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- 300 credits -->
-      <div class="col-12 col-sm-6 col-md-3">
-        <div class="credit-card">
-          <div class="credit-top blue-bg">
-            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#4A7CF7" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-            300
-          </div>
-          <div class="credit-bottom blue-bottom">
-            <span class="credit-price">300 php</span>
-            <button class="btn-purchase" onclick="buyCredits(300, 300)">Purchase</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- 500 credits -->
-      <div class="col-12 col-sm-6 col-md-3">
-        <div class="credit-card">
-          <div class="credit-top blue-bg">
-            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#4A7CF7" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-            500
-          </div>
-          <div class="credit-bottom blue-bottom">
-            <span class="credit-price">450 php</span>
-            <button class="btn-purchase" onclick="buyCredits(500, 450)">Purchase</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- 1000 credits (featured) -->
-      <div class="col-12 col-sm-6 col-md-3">
-        <div class="credit-card featured">
-          <div class="credit-top green-bg">
-            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#1CB98A" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-            1000
-          </div>
-          <div class="credit-bottom green-bottom">
-            <span class="credit-price">875 php</span>
-            <button class="btn-purchase" onclick="buyCredits(1000, 875)">Purchase</button>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-</div>
-
-<!-- Payment Modal -->
-<div id="paymentModal" class="modal-overlay">
-  <div class="modal-content">
-    <button class="modal-close" onclick="closePaymentModal()">&times;</button>
-    
-    <div class="modal-header">
-      <h2>Complete Your Payment</h2>
-    </div>
-    
-    <div class="modal-body">
-      <div class="payment-plan-info">
-        <div class="plan-info-item">
-          <span class="info-label">Plan:</span>
-          <span class="info-value" id="modalPlanName">Plus</span>
-        </div>
-        <div class="plan-info-item">
-          <span class="info-label">Amount:</span>
-          <span class="info-value price" id="modalPlanPrice">600 PHP</span>
-        </div>
-      </div>
-
-      <div class="payment-methods">
-        <h3>Select Payment Method</h3>
-        <div class="methods-grid">
-          <label class="payment-method">
-            <input type="radio" name="paymentMethod" value="credit-card" checked>
-            <div class="method-box">
-              <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><path d="M1 10h22"/></svg>
-              <span>Credit/Debit Card</span>
+        <!-- Free -->
+        <div class="col-12 col-md-4">
+          <div class="plan-card free">
+            <div class="plan-name" style="color:#6B7280;">Free</div>
+            <div class="plan-price" style="color:#1A2340;">0<span>php</span></div>
+            <div class="plan-credits-badge light">
+              <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="none" viewBox="0 0 24 24"
+                stroke="#4A7CF7" stroke-width="2">
+                <circle cx="12" cy="12" r="9" />
+                <path d="M12 7v5l3 3" />
+              </svg>
+              No Monthly Credits (150 free)
             </div>
-          </label>
-          
-          <label class="payment-method">
-            <input type="radio" name="paymentMethod" value="mobile-wallet">
-            <div class="method-box">
-              <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><circle cx="12" cy="12" r="3"/></svg>
-              <span>Mobile Wallet</span>
+            <div class="feature-label" style="color:#6B7280;">SiteTuation Data:</div>
+            <div class="feature-item" style="color:#1A2340;">
+              <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="none"
+                viewBox="0 0 24 24" stroke="#1CB98A" stroke-width="2.5">
+                <path d="M20 6L9 17l-5-5" />
+              </svg>
+              Population Size
             </div>
-          </label>
-          
-          <label class="payment-method">
-            <input type="radio" name="paymentMethod" value="bank-transfer">
-            <div class="method-box">
-              <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7v4c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"/><path d="M10 17l-3-3 1.41-1.41L10 14.17l5.59-5.59L17 10l-7 7z"/></svg>
-              <span>Bank Transfer</span>
+            <div class="feature-item" style="color:#1A2340;">
+              <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="none"
+                viewBox="0 0 24 24" stroke="#1CB98A" stroke-width="2.5">
+                <path d="M20 6L9 17l-5-5" />
+              </svg>
+              3 Nearby Business
             </div>
-          </label>
+            <div class="feature-label" style="color:#6B7280;margin-top:4px;">Account:</div>
+            <div class="feature-item" style="color:#1A2340;">
+              <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="none"
+                viewBox="0 0 24 24" stroke="#1CB98A" stroke-width="2.5">
+                <path d="M20 6L9 17l-5-5" />
+              </svg>
+              1 save
+            </div>
+            <button class="plan-btn current" id="freePlanBtn">Current Plan</button>
+          </div>
         </div>
+
+        <!-- Plus -->
+        <div class="col-12 col-md-4">
+          <div class="plan-card plus">
+            <div class="plan-name">Plus</div>
+            <div class="plan-price">600<span>php / month</span></div>
+            <div class="plan-credits-badge dark">
+              <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="none" viewBox="0 0 24 24"
+                stroke="white" stroke-width="2">
+                <circle cx="12" cy="12" r="9" />
+                <path d="M12 7v5l3 3" />
+              </svg>
+              650 Credits per month
+            </div>
+            <div class="feature-label">SiteTuation Data:</div>
+            <div class="feature-item">
+              <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="none"
+                viewBox="0 0 24 24" stroke="white" stroke-width="2.5">
+                <path d="M20 6L9 17l-5-5" />
+              </svg>
+              All data
+            </div>
+            <div class="feature-item">
+              <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="none"
+                viewBox="0 0 24 24" stroke="white" stroke-width="2.5">
+                <path d="M20 6L9 17l-5-5" />
+              </svg>
+              10 Nearby Businesses
+            </div>
+            <div class="feature-label" style="margin-top:4px;">Account:</div>
+            <div class="feature-item">
+              <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="none"
+                viewBox="0 0 24 24" stroke="white" stroke-width="2.5">
+                <path d="M20 6L9 17l-5-5" />
+              </svg>
+              5 saves
+            </div>
+            <button class="plan-btn white-btn" id="plusPlanBtn" onclick="selectPlan('plus')">Upgrade to Plus</button>
+          </div>
+        </div>
+
+        <!-- Pro -->
+        <div class="col-12 col-md-4">
+          <div class="plan-card pro">
+            <div class="plan-name">Pro</div>
+            <div class="plan-price">1,000<span>php</span></div>
+            <div class="plan-credits-badge dark">
+              <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="none" viewBox="0 0 24 24"
+                stroke="white" stroke-width="2">
+                <circle cx="12" cy="12" r="9" />
+                <path d="M12 7v5l3 3" />
+              </svg>
+              2,000 Credits per month
+            </div>
+            <div class="feature-label">SiteTuation Data:</div>
+            <div class="feature-item">
+              <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="none"
+                viewBox="0 0 24 24" stroke="white" stroke-width="2.5">
+                <path d="M20 6L9 17l-5-5" />
+              </svg>
+              All data
+            </div>
+            <div class="feature-item">
+              <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="none"
+                viewBox="0 0 24 24" stroke="white" stroke-width="2.5">
+                <path d="M20 6L9 17l-5-5" />
+              </svg>
+              Unlimited Uses
+            </div>
+            <div class="feature-label" style="margin-top:4px;">Account:</div>
+            <div class="feature-item">
+              <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="none"
+                viewBox="0 0 24 24" stroke="white" stroke-width="2.5">
+                <path d="M20 6L9 17l-5-5" />
+              </svg>
+              Unlimited saves
+            </div>
+            <button class="plan-btn white-btn" id="proPlanBtn" onclick="selectPlan('pro')">Upgrade to Pro</button>
+          </div>
+        </div>
+
       </div>
     </div>
 
-    <div class="modal-footer">
-      <button class="btn-modal cancel" onclick="closePaymentModal()">Cancel</button>
-      <button class="btn-modal proceed" onclick="confirmPayment()">Proceed with Payment</button>
+    <!-- ── CREDITS ──────────────────────────────────────────────────── -->
+    <div id="creditsContent" class="container" style="max-width:900px;display:none;">
+      <div class="row g-4">
+
+        <!-- 100 credits -->
+        <div class="col-12 col-sm-6 col-md-3">
+          <div class="credit-card">
+            <div class="credit-top blue-bg">
+              <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24"
+                stroke="#4A7CF7" stroke-width="2">
+                <circle cx="12" cy="12" r="9" />
+                <path d="M12 7v5l3 3" />
+              </svg>
+              100
+            </div>
+            <div class="credit-bottom blue-bottom">
+              <span class="credit-price">150 php</span>
+              <button class="btn-purchase" onclick="buyCredits(100, 150)">Purchase</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 300 credits -->
+        <div class="col-12 col-sm-6 col-md-3">
+          <div class="credit-card">
+            <div class="credit-top blue-bg">
+              <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24"
+                stroke="#4A7CF7" stroke-width="2">
+                <circle cx="12" cy="12" r="9" />
+                <path d="M12 7v5l3 3" />
+              </svg>
+              300
+            </div>
+            <div class="credit-bottom blue-bottom">
+              <span class="credit-price">300 php</span>
+              <button class="btn-purchase" onclick="buyCredits(300, 300)">Purchase</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 500 credits -->
+        <div class="col-12 col-sm-6 col-md-3">
+          <div class="credit-card">
+            <div class="credit-top blue-bg">
+              <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24"
+                stroke="#4A7CF7" stroke-width="2">
+                <circle cx="12" cy="12" r="9" />
+                <path d="M12 7v5l3 3" />
+              </svg>
+              500
+            </div>
+            <div class="credit-bottom blue-bottom">
+              <span class="credit-price">450 php</span>
+              <button class="btn-purchase" onclick="buyCredits(500, 450)">Purchase</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 1000 credits (featured) -->
+        <div class="col-12 col-sm-6 col-md-3">
+          <div class="credit-card featured">
+            <div class="credit-top green-bg">
+              <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24"
+                stroke="#1CB98A" stroke-width="2">
+                <circle cx="12" cy="12" r="9" />
+                <path d="M12 7v5l3 3" />
+              </svg>
+              1000
+            </div>
+            <div class="credit-bottom green-bottom">
+              <span class="credit-price">875 php</span>
+              <button class="btn-purchase" onclick="buyCredits(1000, 875)">Purchase</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Payment Modal -->
+  <div id="paymentModal" class="modal-overlay">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closePaymentModal()">&times;</button>
+
+      <div class="modal-header">
+        <h2>Complete Your Payment</h2>
+      </div>
+
+      <div class="modal-body">
+        <div class="payment-plan-info">
+          <div class="plan-info-item">
+            <span class="info-label">Plan:</span>
+            <span class="info-value" id="modalPlanName">Plus</span>
+          </div>
+          <div class="plan-info-item">
+            <span class="info-label">Amount:</span>
+            <span class="info-value price" id="modalPlanPrice">600 PHP</span>
+          </div>
+        </div>
+
+        <div class="payment-methods">
+          <h3>Select Payment Method</h3>
+          <div class="methods-grid">
+            <label class="payment-method">
+              <input type="radio" name="paymentMethod" value="credit-card" checked>
+              <div class="method-box">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="none" viewBox="0 0 24 24"
+                  stroke="currentColor" stroke-width="2">
+                  <rect x="1" y="4" width="22" height="16" rx="2" ry="2" />
+                  <path d="M1 10h22" />
+                </svg>
+                <span>Credit/Debit Card</span>
+              </div>
+            </label>
+
+            <label class="payment-method">
+              <input type="radio" name="paymentMethod" value="mobile-wallet">
+              <div class="method-box">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="none" viewBox="0 0 24 24"
+                  stroke="currentColor" stroke-width="2">
+                  <rect x="1" y="4" width="22" height="16" rx="2" ry="2" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+                <span>Mobile Wallet</span>
+              </div>
+            </label>
+
+            <label class="payment-method">
+              <input type="radio" name="paymentMethod" value="bank-transfer">
+              <div class="method-box">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="none" viewBox="0 0 24 24"
+                  stroke="currentColor" stroke-width="2">
+                  <path d="M12 2L2 7v4c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z" />
+                  <path d="M10 17l-3-3 1.41-1.41L10 14.17l5.59-5.59L17 10l-7 7z" />
+                </svg>
+                <span>Bank Transfer</span>
+              </div>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-modal cancel" onclick="closePaymentModal()">Cancel</button>
+        <button class="btn-modal proceed" onclick="confirmPayment()">Proceed with Payment</button>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- Toast -->
-<div id="toast"></div>
+  <!-- Toast -->
+  <div id="toast"></div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="{{ url_for('static', filename='js/plans_and_credits.js') }}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="{{ url_for('static', filename='js/plans_and_credits.js') }}"></script>
 
 </body>
+
 </html>
