@@ -23,6 +23,6 @@ class Favorites(db.Model):
 
     ai_summary = db.Column(db.Text)
 
+    # Foreign key
     account_id = db.Column(db.Integer, db.ForeignKey('accounts.id'), nullable=False)
-
     account = db.relationship('Account', backref='favorites')
