@@ -42,7 +42,7 @@
       <a href="{{ url_for('auth.logout') }}" class="btn-nav-login">Logout</a>
       {% else %}
       <a href="{{ url_for('auth.login') }}" class="btn-nav-login">Log In</a>
-      <a href="{{ url_for('main.plans') }}" class="btn-nav-cta">
+      <a href="{{ url_for('auth.login') }}" class="btn-nav-cta">
         Get Started
         <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
           <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -412,7 +412,7 @@
           <!--
           In Flask: href="{{ url_for('main.plans') }}"
         -->
-          <a href="plans_and_credits.html" class="plan-btn white-btn">Upgrade to Plus</a>
+          <a href="{{ url_for('auth.login') }}" class="plan-btn white-btn">Upgrade to Plus</a>
         </div>
 
         <!-- Pro -->
@@ -449,7 +449,7 @@
             </svg>
             Unlimited saves
           </div>
-          <a href="plans_and_credits.html" class="plan-btn white-btn">Upgrade to Pro</a>
+          <a href="{{ url_for('auth.login') }}" class="plan-btn white-btn">Upgrade to Pro</a>
         </div>
       </div>
 
